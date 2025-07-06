@@ -9,7 +9,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* Oldingi CSS kodingiz bu yerda joylashgan */
     :root {
       --primary-color: #7000FF;
       --secondary-color: #4A00FF;
@@ -562,7 +561,7 @@
       position: absolute;
       top: 10px;
       left: 10px;
-      background-color: #FF3B30; /* Qizil */
+      background-color: #FF3B30;
       color: white;
       padding: 3px 8px;
       border-radius: 4px;
@@ -575,7 +574,7 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      background-color: #4CAF50; /* Yashil */
+      background-color: #4CAF50;
       color: white;
       padding: 3px 8px;
       border-radius: 4px;
@@ -588,7 +587,7 @@
       position: absolute;
       bottom: 10px;
       left: 10px;
-      background-color: #007bff; /* Moviy */
+      background-color: #007bff;
       color: white;
       padding: 3px 8px;
       border-radius: 4px;
@@ -611,7 +610,7 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      min-height: 40px; /* Ikki qator uchun min balandlik */
+      min-height: 40px;
       color: var(--text-color);
       font-weight: 500;
     }
@@ -623,7 +622,7 @@
     }
 
     .product-rating i {
-      color: #FFC107; /* Sariq yulduz */
+      color: #FFC107;
       font-size: 14px;
       margin-right: 3px;
     }
@@ -651,7 +650,7 @@
     .product-credit {
       font-size: 13px;
       color: var(--gray-text);
-      margin-top: auto; /* Pastga siljitish */
+      margin-top: auto;
       padding-top: 8px;
       border-top: 1px solid #eee;
     }
@@ -673,6 +672,189 @@
     .buy-button:hover {
       background-color: var(--secondary-color);
       transform: translateY(-2px);
+    }
+
+    /* Qo'shimcha stillar */
+    .product-card .product-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .product-card .action-btn {
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .product-card .action-btn:hover {
+      background-color: #f5f5f5;
+    }
+
+    .product-card .action-btn i {
+      color: var(--primary-color);
+    }
+
+    .product-filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .filter-btn {
+      padding: 8px 15px;
+      border-radius: 20px;
+      background: white;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .product-specs {
+      font-size: 13px;
+      color: var(--gray-text);
+      margin-top: 5px;
+    }
+
+    .product-specs span {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .credit-calculator {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .credit-calculator.active {
+      display: block;
+    }
+
+    .credit-calculator label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+
+    .credit-calculator input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .product-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .product-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--gray-text);
+    }
+
+    .modal-product-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      margin-bottom: 20px;
+    }
+
+    .modal-product-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .modal-product-price {
+      font-size: 28px;
+      color: var(--primary-color);
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .modal-product-old-price {
+      text-decoration: line-through;
+      color: var(--gray-text);
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .modal-product-rating {
+      margin-bottom: 15px;
+    }
+
+    .modal-product-description {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .modal-product-specs {
+      margin-bottom: 20px;
+    }
+
+    .modal-product-specs h4 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .modal-product-specs ul {
+      list-style-type: none;
+    }
+
+    .modal-product-specs li {
+      margin-bottom: 8px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .modal-product-specs li:before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--primary-color);
     }
 
     /* Animations */
@@ -766,11 +948,11 @@
       }
 
       .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Kichikroq ekranlarda kichikroq kartochkalar */
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 15px;
       }
       .product-image-container {
-        height: 140px; /* Kichikroq ekranlarda rasm balandligi */
+        height: 140px;
       }
       .product-name {
         font-size: 14px;
@@ -936,149 +1118,159 @@
       </div>
     </div>
 
-    <c:if test="${not empty errorMessage}">
-      <p class="error-message">Xatolik yuz berdi: ${errorMessage}</p>
-    </c:if>
-    <c:if test="${empty recommendedProducts && empty discountedProducts && empty errorMessage}">
-      <p class="no-products-message">Hozircha mahsulotlar mavjud emas.</p>
-    </c:if>
-
-    <c:if test="${not empty recommendedProducts}">
-      <div class="section-title">
-        <h2>Tavsiya etamiz</h2>
-        <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="products-grid">
-        <c:forEach var="product" items="${recommendedProducts}">
-          <div class="product-card">
-            <div class="product-image-container">
-              <img src="${product.imageUrl}" alt="${product.name}" class="product-image">
-              <c:if test="${product.oldPrice > 0 && product.price < product.oldPrice}">
-                <div class="discount-badge">
-                  -<fmt:formatNumber value="${(product.oldPrice - product.price) / product.oldPrice * 100}" pattern="0"/>%
-                </div>
-              </c:if>
-              <c:if test="${product.hasCredit}">
-                <div class="kredit-badge">Kredit</div>
-              </c:if>
-              <c:if test="${product.isSuperPrice}">
-                <div class="super-price-badge">Super narx</div>
-              </c:if>
-            </div>
-            <div class="product-info">
-              <div class="product-name">${product.name}</div>
-              <div class="product-rating">
-                <c:forEach begin="1" end="5" varStatus="loop">
-                  <c:choose>
-                    <c:when test="${product.rating >= loop.index}">
-                      <i class="fas fa-star"></i>
-                    </c:when>
-                    <c:when test="${product.rating > loop.index - 0.5}">
-                      <i class="fas fa-star-half-alt"></i>
-                    </c:when>
-                    <c:otherwise>
-                      <i class="far fa-star"></i>
-                    </c:otherwise>
-                  </c:choose>
-                </c:forEach>
-                <span>(${product.reviewCount})</span>
-              </div>
-              <c:if test="${product.oldPrice > 0 && product.price < product.oldPrice}">
-                <div class="product-old-price">
-                  <fmt:formatNumber value="${product.oldPrice}" type="number" maxFractionDigits="0"/> so'm
-                </div>
-              </c:if>
-              <div class="product-price">
-                <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/> so'm
-              </div>
-              <c:if test="${product.hasCredit}">
-                <div class="product-credit">
-                  <fmt:formatNumber value="${product.creditPricePerMonth}" type="number" maxFractionDigits="0"/> so'mdan/oyiga
-                </div>
-              </c:if>
-              <button class="buy-button">Savatga</button>
-            </div>
+    <!-- Rasmdagi mahsulotlar bo'limi -->
+    <div class="section-title">
+      <h2>Avtomobil tonirovkasi</h2>
+      <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="products-grid">
+      <!-- 1-mahsulot -->
+      <div class="product-card" onclick="openProductModal('Alfa tonirovka 100%, 70%, 50%, umalilganda ko\'p martalik', 97000, 886980, 3.6, 33, 'https://example.com/alfa-tonirovka.jpg', 'Yangi avtomobillar uchun yuqori sifatli tonirovka plyonkasi. 100%, 70%, 50% qoraytirish darajalari mavjud. Ko\'p marta qayta ishlatish mumkin. O\'rnatish va yechish oson.')">
+        <div class="product-image-container">
+          <img src="https://example.com/alfa-tonirovka.jpg" alt="Alfa tonirovka" class="product-image">
+          <div class="kredit-badge">Kredit</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Alfa tonirovka 100%, 70%, 50%, umalilganda ko'p martalik</div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <i class="far fa-star"></i>
+            <span>(33)</span>
           </div>
-        </c:forEach>
+          <div class="product-price">97 000 so'm</div>
+          <div class="product-old-price">886 980 so'm</div>
+          <div class="product-credit">7 083 so'mdan/oyiga</div>
+          <button class="buy-button">Savatga</button>
+        </div>
       </div>
-    </c:if>
 
-    <c:if test="${not empty discountedProducts}">
-      <div class="section-title">
-        <h2>Chegirmalar</h2>
-        <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="products-grid">
-        <c:forEach var="product" items="${discountedProducts}">
-          <div class="product-card">
-            <div class="product-image-container">
-              <img src="${product.imageUrl}" alt="${product.name}" class="product-image">
-              <c:if test="${product.oldPrice > 0 && product.price < product.oldPrice}">
-                <div class="discount-badge">
-                  -<fmt:formatNumber value="${(product.oldPrice - product.price) / product.oldPrice * 100}" pattern="0"/>%
-                </div>
-              </c:if>
-              <c:if test="${product.hasCredit}">
-                <div class="kredit-badge">Kredit</div>
-              </c:if>
-                <%-- Chegirmali mahsulotlarda Super narx bo'lmasa ham, sizning asl kodingizda bor edi, shuning uchun qoldirdim. Agar kerak bo'lmasa olib tashlashingiz mumkin --%>
-              <c:if test="${product.isSuperPrice}">
-                <div class="super-price-badge">Super narx</div>
-              </c:if>
-            </div>
-            <div class="product-info">
-              <div class="product-name">${product.name}</div>
-              <div class="product-rating">
-                <c:forEach begin="1" end="5" varStatus="loop">
-                  <c:choose>
-                    <c:when test="${product.rating >= loop.index}">
-                      <i class="fas fa-star"></i>
-                    </c:when>
-                    <c:when test="${product.rating > loop.index - 0.5}">
-                      <i class="fas fa-star-half-alt"></i>
-                    </c:when>
-                    <c:otherwise>
-                      <i class="far fa-star"></i>
-                    </c:otherwise>
-                  </c:choose>
-                </c:forEach>
-                <span>(${product.reviewCount})</span>
-              </div>
-              <c:if test="${product.oldPrice > 0 && product.price < product.oldPrice}">
-                <div class="product-old-price">
-                  <fmt:formatNumber value="${product.oldPrice}" type="number" maxFractionDigits="0"/> so'm
-                </div>
-              </c:if>
-              <div class="product-price">
-                <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/> so'm
-              </div>
-              <c:if test="${product.hasCredit}">
-                <div class="product-credit">
-                  <fmt:formatNumber value="${product.creditPricePerMonth}" type="number" maxFractionDigits="0"/> so'mdan/oyiga
-                </div>
-              </c:if>
-              <button class="buy-button">Savatga</button>
-            </div>
+      <!-- 2-mahsulot -->
+      <div class="product-card" onclick="openProductModal('Alfa tonirovka 70%, umalilganda 100% ko\'p martalik', 98794, 0, 3.4, 200, 'https://example.com/alfa-tonirovka-70.jpg', '70% qoraytirish darajasiga ega tonirovka plyonkasi. Ko\'p marta qayta ishlatish mumkin. O\'rnatish va yechish juda oson. Avtomobil oynalarini quyosh nurlaridan himoya qiladi.')">
+        <div class="product-image-container">
+          <img src="https://example.com/alfa-tonirovka-70.jpg" alt="Alfa tonirovka 70%" class="product-image">
+        </div>
+        <div class="product-info">
+          <div class="product-name">Alfa tonirovka 70%, umalilganda 100% ko'p martalik, o'rnatish va yechish oson</div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+            <i class="far fa-star"></i>
+            <span>(200)</span>
           </div>
-        </c:forEach>
+          <div class="product-price">98 794 so'm</div>
+          <div class="product-credit">7 214 so'mdan/oyiga</div>
+          <button class="buy-button">Savatga</button>
+        </div>
       </div>
-    </c:if>
+    </div>
+
+    <!-- Muzlatgichlar bo'limi -->
+    <div class="section-title">
+      <h2>Maishiy texnika</h2>
+      <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="products-grid">
+      <!-- 1-mahsulot -->
+      <div class="product-card" onclick="openProductModal('Ikki kamerali muzlatgich Bhyusa 120', 2564050, 0, 4.9, 40, 'https://example.com/bhyusa-muzlatgich.jpg', 'Hajmi: 205 litr\nIkki kamerali\nEneriya sarfi: A++\nNo Frost tizimi\nOq rang\n1 yil kafolat')">
+        <div class="product-image-container">
+          <img src="https://example.com/bhyusa-muzlatgich.jpg" alt="Bhyusa muzlatgich" class="product-image">
+          <div class="kredit-badge">Kredit</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Ikki kamerali muzlatgich Bhyusa 120, hajmi 205 ltr</div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(40)</span>
+          </div>
+          <div class="product-price">2 564 050 so'm</div>
+          <div class="product-credit">191 179 so'mdan/oyiga</div>
+          <button class="buy-button">Savatga</button>
+        </div>
+      </div>
+
+      <!-- 2-mahsulot -->
+      <div class="product-card" onclick="openProductModal('Sovutgich Indesit iTS 4200 NG', 6174050, 0, 5.0, 3, 'https://example.com/indesit-muzlatgich.jpg', 'Hajmi: 325 litr\nNo Frost tizimi\nEneriya sarfi: A+\nOq rang\nInverter kompressor\n2 yil kafolat')">
+        <div class="product-image-container">
+          <img src="https://example.com/indesit-muzlatgich.jpg" alt="Indesit muzlatgich" class="product-image">
+          <div class="kredit-badge">Kredit</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Sovutgich Indesit iTS 4200 NG, 325 Ltr, No Frost</div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>(3)</span>
+          </div>
+          <div class="product-price">6 174 050 so'm</div>
+          <div class="product-credit">460 345 so'mdan/oyiga</div>
+          <button class="buy-button">Savatga</button>
+        </div>
+      </div>
+
+      <!-- 3-mahsulot -->
+      <div class="product-card" onclick="openProductModal('Sovutgich Roksen RHWG RD33', 4647875, 0, 4.9, 15, 'https://example.com/roksen-muzlatgich.jpg', 'Hajmi: 251 litr\nNo Frost tizimi\nEneriya sarfi: A++\nKumush rang\nInverter kompressor\nSmart nazorat\n2 yil kafolat')">
+        <div class="product-image-container">
+          <img src="https://example.com/roksen-muzlatgich.jpg" alt="Roksen muzlatgich" class="product-image">
+          <div class="kredit-badge">Kredit</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Sovutgich Roksen RHWG RD33, sig'imi 251 ltr</div>
+          <div class="product-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(15)</span>
+          </div>
+          <div class="product-price">4 647 875 so'm</div>
+          <div class="product-credit">346 552 so'mdan/oyiga</div>
+          <button class="buy-button">Savatga</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mahsulot modal oynasi -->
+    <div class="product-modal" id="productModal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <img src="" alt="Mahsulot rasmi" class="modal-product-image" id="modalProductImage">
+        <h2 class="modal-product-title" id="modalProductTitle"></h2>
+        <div class="modal-product-price" id="modalProductPrice"></div>
+        <div class="modal-product-old-price" id="modalProductOldPrice"></div>
+        <div class="modal-product-rating" id="modalProductRating"></div>
+        <div class="modal-product-description" id="modalProductDescription"></div>
+        <div class="modal-product-specs">
+          <h4>Texnik xususiyatlar</h4>
+          <ul id="modalProductSpecs">
+            <!-- JavaScript orqali to'ldiriladi -->
+          </ul>
+        </div>
+        <button class="buy-button" style="margin-top: 20px;">Savatga qo'shish</button>
+      </div>
+    </div>
 
   </div>
 </main>
 
 <script>
-  // =====================================
-  //          ICHKI JAVASCRIPT KODLARI
-  // =====================================
-
-  // Carousel functionality
+  // Karusel uchun JavaScript
   let currentSlide = 0;
   const slides = document.querySelectorAll('.carousel-slide');
-  const totalSlides = slides.length;
-  const carouselInner = document.getElementById('carouselInner');
   const indicators = document.querySelectorAll('.carousel-indicator');
-  let slideInterval;
+  const totalSlides = slides.length;
 
   function showSlide(index) {
     if (index >= totalSlides) {
@@ -1089,68 +1281,121 @@
       currentSlide = index;
     }
 
+    const carouselInner = document.getElementById('carouselInner');
     carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
 
     // Update indicators
     indicators.forEach((indicator, i) => {
-      indicator.classList.toggle('active', i === currentSlide);
+      if (i === currentSlide) {
+        indicator.classList.add('active');
+      } else {
+        indicator.classList.remove('active');
+      }
     });
   }
 
   function moveSlide(direction) {
     showSlide(currentSlide + direction);
-    resetInterval();
   }
 
   function goToSlide(index) {
     showSlide(index);
-    resetInterval();
   }
 
-  function resetInterval() {
-    clearInterval(slideInterval);
-    slideInterval = setInterval(() => moveSlide(1), 5000);
-  }
+  // Auto slide every 5 seconds
+  setInterval(() => {
+    moveSlide(1);
+  }, 5000);
 
-  // Start the carousel
-  document.addEventListener('DOMContentLoaded', function() {
-    showSlide(0); // Sahifa yuklanganda birinchi slaydni ko'rsatish
-    resetInterval(); // Avtomatik slayd aylanishini boshlash
+  // Mahsulot modal oynasi uchun funksiyalar
+  function openProductModal(name, price, oldPrice, rating, reviews, imageUrl, description) {
+    const modal = document.getElementById('productModal');
+    const modalTitle = document.getElementById('modalProductTitle');
+    const modalPrice = document.getElementById('modalProductPrice');
+    const modalOldPrice = document.getElementById('modalProductOldPrice');
+    const modalRating = document.getElementById('modalProductRating');
+    const modalImage = document.getElementById('modalProductImage');
+    const modalDescription = document.getElementById('modalProductDescription');
+    const modalSpecs = document.getElementById('modalProductSpecs');
 
-    // Mahsulot kartasiga bosish funksiyasi (misol uchun)
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(card => {
-      card.addEventListener('click', function() {
-        const productName = this.querySelector('.product-name').textContent;
-        console.log('Siz "' + productName + '" mahsulotiga bosdingiz!');
-        // Bu yerga mahsulot detail sahifasiga o'tish logikasini qo'shishingiz mumkin.
-        // Masalan: window.location.href = '/product-details?id=' + this.dataset.productId;
-      });
+    modalTitle.textContent = name;
+    modalPrice.textContent = new Intl.NumberFormat('uz-UZ').format(price) + ' so\'m';
+
+    if (oldPrice > 0) {
+      modalOldPrice.textContent = new Intl.NumberFormat('uz-UZ').format(oldPrice) + ' so\'m';
+      modalOldPrice.style.display = 'block';
+    } else {
+      modalOldPrice.style.display = 'none';
+    }
+
+    // Create rating stars
+    let ratingStars = '';
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        ratingStars += '<i class="fas fa-star"></i>';
+      } else if (rating > i - 0.5) {
+        ratingStars += '<i class="fas fa-star-half-alt"></i>';
+      } else {
+        ratingStars += '<i class="far fa-star"></i>';
+      }
+    }
+    ratingStars += ` <span>(${reviews} sharhlar)</span>`;
+    modalRating.innerHTML = ratingStars;
+
+    modalImage.src = imageUrl;
+    modalImage.alt = name;
+
+    // Format description (replace \n with <br>)
+    const formattedDescription = description.replace(/\n/g, '<br>');
+    modalDescription.innerHTML = formattedDescription;
+
+    // Generate specs from description (for demo)
+    const specs = description.split('\n');
+    modalSpecs.innerHTML = '';
+    specs.forEach(spec => {
+      if (spec.trim() !== '') {
+        const li = document.createElement('li');
+        li.textContent = spec;
+        modalSpecs.appendChild(li);
+      }
     });
 
-    // Katalog tugmasi click
-    const catalogButton = document.querySelector('.catalog-button');
-    if (catalogButton) {
-      catalogButton.addEventListener('click', function() {
-        alert('Katalogga o\'tish funksiyasi hali ishga tushirilmagan!');
-        // Bu yerda katalog sahifasiga yo'naltirish yoki popup ochish mumkin
-      });
-    }
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
 
-    // Shahar tanlash funksiyasi (agar kerak bo'lsa)
-    const locationSelect = document.querySelector('.header-location select');
-    if (locationSelect) {
-      locationSelect.addEventListener('change', function() {
-        console.log('Tanlangan shahar: ' + this.value);
-        // Bu yerda tanlangan shaharga qarab kontentni yangilash logikasi bo'lishi mumkin
+  function closeModal() {
+    const modal = document.getElementById('productModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  // Savatga qo'shish funksiyasi
+  function addToCart(productId, quantity = 1) {
+    // Bu yerda haqiqiy loyihada backendga so'rov yuboriladi
+    console.log(`Mahsulot ID: ${productId}, miqdori: ${quantity} savatga qo'shildi`);
+    alert('Mahsulot savatga qo\'shildi!');
+  }
+
+  // Mahsulot kartalaridagi "Savatga" tugmalariga hodisalar
+  document.addEventListener('DOMContentLoaded', function() {
+    const buyButtons = document.querySelectorAll('.buy-button');
+    buyButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation(); // Modal ochilishining oldini olish
+        const productCard = this.closest('.product-card');
+        const productName = productCard.querySelector('.product-name').textContent;
+        alert(`"${productName}" savatga qo'shildi!`);
       });
-    }
+    });
   });
 
-  // Pause on hover
-  if (carouselInner) {
-    carouselInner.addEventListener('mouseenter', () => clearInterval(slideInterval));
-    carouselInner.addEventListener('mouseleave', resetInterval);
+  // Modal oynasini tashqariga bosib yopish
+  window.onclick = function(event) {
+    const modal = document.getElementById('productModal');
+    if (event.target === modal) {
+      closeModal();
+    }
   }
 </script>
 </body>
