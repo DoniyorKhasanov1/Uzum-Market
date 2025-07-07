@@ -4,51 +4,63 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.example.uzum_market.entity.Product;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ProductRepository {
-
     private EntityManager entityManager;
 
-    public void setEntityManager(EntityManager entityManager) {
+    public ProductRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     public List<Product> findAll() {
-        if (entityManager == null) {
-            throw new IllegalStateException("EntityManager is not set for ProductRepository.");
+        try {
+            return entityManager.createQuery("SELECT p FROM Product p", Product.class)
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error in findAll(): " + e.getMessage());
+            return Collections.emptyList();
         }
-        TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p", Product.class);
-        return query.getResultList();
     }
 
     public List<Product> findRecommendedProducts() {
-        if (entityManager == null) {
-            throw new IllegalStateException("EntityManager is not set for ProductRepository.");
+        try {
+            return entityManager.createQuery(
+                            "SELECT p FROM Product p WHERE p.isRecommended = true ORDER BY p.rating DESC",
+                            Product.class)
+                    .setMaxResults(8)
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error in findRecommendedProducts(): " + e.getMessage());
+            return Collections.emptyList();
         }
-        // Eng yangi yoki eng yuqori reytingli mahsulotlarni tavsiya etish
-        TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p ORDER BY p.id DESC", Product.class);
-        query.setMaxResults(8); // Misol uchun, 8 ta tavsiya etilgan mahsulot
-        return query.getResultList();
     }
 
     public List<Product> findDiscountedProducts() {
-        if (entityManager == null) {
-            throw new IllegalStateException("EntityManager is not set for ProductRepository.");
+        try {
+            return entityManager.createQuery(
+                            "SELECT p FROM Product p WHERE p.oldPrice > 0 AND p.price < p.oldPrice " +
+                            "ORDER BY (p.oldPrice - p.price) DESC",
+                            Product.class)
+                    .setMaxResults(8)
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error in findDiscountedProducts(): " + e.getMessage());
+            return Collections.emptyList();
         }
-        // Chegirmali mahsulotlar (oldPrice mavjud va price < oldPrice)
-        TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p WHERE p.oldPrice IS NOT NULL AND p.price < p.oldPrice ORDER BY p.id DESC", Product.class);
-        query.setMaxResults(8); // Misol uchun, 8 ta chegirmali mahsulot
-        return query.getResultList();
     }
 
-    // Saqlash metodi (MainPageServlet.init() da ishlatish uchun)
     public void save(Product product) {
-        if (entityManager == null) {
-            throw new IllegalStateException("EntityManager is not set for ProductRepository.");
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(product);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new RuntimeException("Error saving product: " + e.getMessage(), e);
         }
-        // Tranzaktsiya bu yerda boshlanmaydi va tugamaydi, chunki u init() metodida boshqariladi.
-        // Agar alohida chaqirilsa, tranzaktsiya boshqaruvini qo'shish kerak.
-        entityManager.persist(product);
     }
 }
