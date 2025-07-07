@@ -1036,10 +1036,10 @@
                     <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2">
+                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 2">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/csuqpnr4nkdilc6boou0/main_page_banner.jpg" alt="Promo Banner 3">
+                    <img src="https://daryo.uz/static/2023/06/Reklama%20%2006/image_2023-06-13_16-07-42.png" alt="Promo Banner 3">
                 </div>
             </div>
 
@@ -1272,7 +1272,7 @@
 
     function resetInterval() {
         clearInterval(slideInterval);
-        slideInterval = setInterval(() => moveSlide(1), 5000);
+        slideInterval = setInterval(() => moveSlide(1), 2000);
     }
 
     // Start the carousel
