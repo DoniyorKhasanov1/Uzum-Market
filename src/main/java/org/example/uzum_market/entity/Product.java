@@ -8,35 +8,38 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "products") // Jadval nomini aniq ko'rsatish tavsiya etiladi.
+@Table(name = "products")
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    private int price;
+    @Column(nullable = false)
+    private Integer price;
 
     @Column(name = "old_price")
-    private int oldPrice;
+    private Integer oldPrice;
 
-    private double rating;
+    private Double rating;
 
     @Column(name = "review_count")
-    private int reviewCount;
+    private Integer reviewCount;
 
     @Column(name = "credit_price_per_month")
-    private int creditPricePerMonth;
+    private Integer creditPricePerMonth;
 
     @Column(name = "has_credit")
-    private boolean hasCredit;
+    private Boolean hasCredit;
 
     @Column(name = "is_super_price")
-    private boolean isSuperPrice;
+    private Boolean isSuperPrice;
 
+    @Column(name = "is_recommended")
+    private Boolean isRecommended;
 }
