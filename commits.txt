@@ -1,0 +1,75 @@
+[33mcommit b683fdb9e5d9ed87b103ee690b89d150f806f1d4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdoniyor[m[33m, [m[1;31morigin/doniyor[m[33m)[m
+Merge: cfbc99a fcee84c
+Author: Doniyor <doniyork334@gmail.com>
+Date:   Tue Jul 8 09:37:11 2025 +0500
+
+    Changes after merging
+
+[33mcommit cfbc99a083c497762f618486d77bf530962f36a7[m
+Author: Doniyor <doniyork334@gmail.com>
+Date:   Tue Jul 8 00:25:52 2025 +0500
+
+    aralashib ketdi
+
+[33mcommit fcee84c09ee13a616a9459a03610c794b6879417[m
+Merge: 3f3ba57 b03e0cb
+Author: DoniyorKhasanov1 <doniyork334@gmail.com>
+Date:   Tue Jul 8 00:13:23 2025 +0500
+
+    Merge pull request #3 from DoniyorKhasanov1/muhammad
+    
+    JS functions
+
+[33mcommit b03e0cbe2c444f71685e2290a85eb4cd7983bd86[m
+Author: Muhammad <muhammadshirinov11@gmail.com>
+Date:   Mon Jul 7 15:58:26 2025 +0500
+
+    update codes
+
+[33mcommit c31fb042e5da6c1bee6c9e87ebaa9fe968c0e91d[m
+Author: Muhammad <muhammadshirinov11@gmail.com>
+Date:   Mon Jul 7 15:47:27 2025 +0500
+
+    update
+
+[33mcommit 20b97c4ff0ffd44a0e1c024ff0b88f71e1f04eea[m
+Author: Doniyor <doniyork334@gmail.com>
+Date:   Sun Jul 6 17:51:41 2025 +0500
+
+    Unneeded file has been removed
+
+[33mcommit 21255f8f407669a9f91598fd0b8b5c5a464de085[m
+Author: Doniyor <doniyork334@gmail.com>
+Date:   Sun Jul 6 17:46:38 2025 +0500
+
+    Login form completed
+
+[33mcommit abd94c8f383773df00cbbfd763643502ab025fa5[m
+Author: Muhammad <muhammadshirinov11@gmail.com>
+Date:   Sun Jul 6 13:55:46 2025 +0500
+
+    update
+
+[33mcommit f02ca470be65e21d174d56ae92c8db707048cbe6[m
+Author: Muhammad <muhammadshirinov11@gmail.com>
+Date:   Sun Jul 6 13:24:47 2025 +0500
+
+    update
+
+[33mcommit 2d9a755834ceeba52498d2eba3c21ac2c2c366cb[m
+Author: Muhammad <muhammadshirinov11@gmail.com>
+Date:   Sat Jul 5 14:45:09 2025 +0500
+
+    update
+
+[33mcommit 3f3ba5761ce39cc831e48d705dc36c2eaf6c840c[m
+Author: Doniyor <doniyork334@gmail.com>
+Date:   Sat Jul 5 12:20:09 2025 +0500
+
+    Initial commit
+
+[33mcommit f45f9931eb78bba7c63c205caad2d374162dc9d0[m
+Author: DoniyorKhasanov1 <doniyork334@gmail.com>
+Date:   Sat Jul 5 12:00:27 2025 +0500
+
+    Initial commit
