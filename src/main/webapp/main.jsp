@@ -8,37 +8,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <header>
     <div class="container">
         <div class="header-top">
-            <!-- Header qismidagi viloyat tanlovini o'zgartiring -->
-            <!-- In your header where region selection appears -->
             <div class="header-location">
-                <i class="icon-location"></i>
+                <i class="fas fa-map-marker-alt"></i>
                 <span id="selectedRegion">Toshkent</span>
             </div>
-
-            <!-- Region Modal (place this at the bottom of your body) -->
-            <div class="region-modal">
+            <div class="region-modal" id="regionModal">
                 <div class="region-modal-content">
-                    <button class="close-region-modal">&times;</button>
-                    <h2>Viloyatingizni tanlang</h2>
+                    <span class="close-region-modal">&times;</span>
+                    <h2>Viloyatni Tanlang</h2>
                     <div class="region-grid">
                         <div class="region-item">Toshkent</div>
-                        <div class="region-item">Samarqand</div>
-                        <div class="region-item">Buxoro</div>
                         <div class="region-item">Andijon</div>
-                        <div class="region-item">Namangan</div>
+                        <div class="region-item">Buxoro</div>
                         <div class="region-item">Farg'ona</div>
-                        <div class="region-item">Qarshi</div>
-                        <div class="region-item">Navoiy</div>
                         <div class="region-item">Jizzax</div>
-                        <div class="region-item">Guliston</div>
-                        <div class="region-item">Termiz</div>
-                        <div class="region-item">Nukus</div>
+                        <div class="region-item">Xorazm</div>
+                        <div class="region-item">Namangan</div>
+                        <div class="region-item">Navoiy</div>
+                        <div class="region-item">Qashqadaryo</div>
+                        <div class="region-item">Samarqand</div>
+                        <div class="region-item">Sirdaryo</div>
+                        <div class="region-item">Surxondaryo</div>
                     </div>
                 </div>
             </div>
@@ -49,7 +45,6 @@
                 <a href="#" class="header-link"><i class="fas fa-globe"></i> O'zbekcha</a>
             </div>
         </div>
-
         <div class="header-main">
             <div class="logo">uzum market</div>
             <button class="catalog-button">
@@ -78,7 +73,6 @@
                 </a>
             </div>
         </div>
-
         <div class="header-categories">
             <a href="#" class="category">Hafta tovarlari</a>
             <a href="#" class="category">Elektronika</a>
@@ -87,57 +81,40 @@
             <a href="#" class="category">Poyabzallar</a>
             <a href="#" class="category">Aksessuarlar</a>
             <a href="#" class="category">Go'zallik va parvarish</a>
-            <a href="#" class="category">Salomatlik</a>
-            <a href="#" class="category">Uy-ro'zg'or buyumlari</a>
-            <a href="#" class="category">Qurilish va ta'mirlash</a>
-            <a href="#" class="category">Avtomobillar uchun</a>
-            <a href="#" class="category">Sport anjomlari</a>
-            <a href="#" class="category">O'yinchoqlar</a>
-            <a href="#" class="category">Kitoblar</a>
-            <a href="#" class="category">Oziq-ovqat</a>
-            <a href="#" class="category">Dorixona</a>
-            <a href="#" class="category">Uy hayvonlari uchun</a>
-            <a href="#" class="category">Bog' va tomorqa</a>
-            <a href="#" class="category">Hordiq va turizm</a>
-            <a href="#" class="category">Xizmatlar</a>
-            <a href="#" class="category">Yana</a>
+            <a href="#" class="category">Barchasi</a>
         </div>
     </div>
 </header>
-
 <main class="main-content">
     <div class="container">
         <div class="carousel-container">
             <div class="carousel-inner" id="carouselInner">
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1">
+                    <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1" loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2">
+                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2" loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 3">
+                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 3" loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Promo Banner 4">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Promo Banner 4" loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/clga9ofn7c6qm23k8mkg/main_page_banner.jpg" alt="Promo Banner 5">
+                    <img src="https://images.uzum.uz/clga9ofn7c6qm23k8mkg/main_page_banner.jpg" alt="Promo Banner 5" loading="lazy">
                 </div>
             </div>
-
-            <button class="carousel-arrow left" onclick="moveSlide(-1)"><i class="fas fa-chevron-left"></i></button>
-            <button class="carousel-arrow right" onclick="moveSlide(1)"><i class="fas fa-chevron-right"></i></button>
-
+            <button class="carousel-arrow left"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right"><i class="fas fa-chevron-right"></i></button>
             <div class="carousel-indicators" id="carouselIndicators">
-                <div class="carousel-indicator active" onclick="goToSlide(0)"></div>
-                <div class="carousel-indicator" onclick="goToSlide(1)"></div>
-                <div class="carousel-indicator" onclick="goToSlide(2)"></div>
-                <div class="carousel-indicator" onclick="goToSlide(3)"></div>
-                <div class="carousel-indicator" onclick="goToSlide(4)"></div>
+                <div class="carousel-indicator active"></div>
+                <div class="carousel-indicator"></div>
+                <div class="carousel-indicator"></div>
+                <div class="carousel-indicator"></div>
+                <div class="carousel-indicator"></div>
             </div>
         </div>
-
         <div class="feature-blocks">
             <div class="feature-block">
                 <div class="icon"><i class="fas fa-baby-carriage"></i></div>
@@ -156,7 +133,6 @@
                 <span>Hafta tovarlari</span>
             </div>
         </div>
-
         <div class="uzum-card-banner fade-in">
             <div class="uzum-card-content">
                 <div class="uzum-card-text">
@@ -171,17 +147,14 @@
                 </div>
                 <div class="uzum-card-image">
                     <img src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg"
-                         alt="Uzum Card">
+                         alt="Uzum Card" loading="lazy">
                 </div>
             </div>
         </div>
-
-        <!-- Tavsiya etilgan mahsulotlar -->
         <div class="section-title">
             <h2>Tavsiya etilgan mahsulotlar</h2>
             <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
         </div>
-
         <c:choose>
             <c:when test="${not empty recommendedProducts}">
                 <div class="products-grid">
@@ -249,13 +222,10 @@
                 </div>
             </c:otherwise>
         </c:choose>
-
-        <!-- Chegirmali mahsulotlar -->
         <div class="section-title">
             <h2>Chegirmali mahsulotlar</h2>
             <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
         </div>
-
         <c:choose>
             <c:when test="${not empty discountedProducts}">
                 <div class="products-grid">
@@ -323,11 +293,9 @@
                 </div>
             </c:otherwise>
         </c:choose>
-
-        <!-- Mahsulot modal oynasi -->
         <div class="product-modal" id="productModal">
             <div class="modal-content">
-                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <span class="close-modal">&times;</span>
                 <img src="" alt="Mahsulot rasmi" class="modal-product-image" id="modalProductImage">
                 <h2 class="modal-product-title" id="modalProductTitle"></h2>
                 <div class="modal-product-price" id="modalProductPrice"></div>
@@ -336,17 +304,13 @@
                 <div class="modal-product-description" id="modalProductDescription"></div>
                 <div class="modal-product-specs">
                     <h4>Texnik xususiyatlar</h4>
-                    <ul id="modalProductSpecs">
-                        <!-- JavaScript orqali to'ldiriladi -->
-                    </ul>
+                    <ul id="modalProductSpecs"></ul>
                 </div>
                 <button class="buy-button" style="margin-top: 20px;">Savatga qo'shish</button>
             </div>
         </div>
-
     </div>
 </main>
-
 <script src="/js/main.js"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ProductRepository {
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public ProductRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -16,37 +16,36 @@ public class ProductRepository {
 
     public List<Product> findAll() {
         try {
-            return entityManager.createQuery("SELECT p FROM Product p", Product.class)
-                    .getResultList();
+            TypedQuery<Product> query = entityManager.createQuery(
+                    "SELECT p FROM Product p ORDER BY p.id DESC", Product.class);
+            return query.getResultList();
         } catch (Exception e) {
-            System.err.println("Error in findAll(): " + e.getMessage());
+            System.err.println("Xatolik findAll(): " + e.getMessage());
             return Collections.emptyList();
         }
     }
 
     public List<Product> findRecommendedProducts() {
         try {
-            return entityManager.createQuery(
-                            "SELECT p FROM Product p WHERE p.isRecommended = true ORDER BY p.rating DESC",
-                            Product.class)
-                    .setMaxResults(8)
-                    .getResultList();
+            TypedQuery<Product> query = entityManager.createQuery(
+                    "SELECT p FROM Product p WHERE p.isRecommended = true ORDER BY p.rating DESC",
+                    Product.class);
+            return query.getResultList();
         } catch (Exception e) {
-            System.err.println("Error in findRecommendedProducts(): " + e.getMessage());
+            System.err.println("Xatolik findRecommendedProducts(): " + e.getMessage());
             return Collections.emptyList();
         }
     }
 
     public List<Product> findDiscountedProducts() {
         try {
-            return entityManager.createQuery(
-                            "SELECT p FROM Product p WHERE p.oldPrice > 0 AND p.price < p.oldPrice " +
-                            "ORDER BY (p.oldPrice - p.price) DESC",
-                            Product.class)
-                    .setMaxResults(8)
-                    .getResultList();
+            TypedQuery<Product> query = entityManager.createQuery(
+                    "SELECT p FROM Product p WHERE p.oldPrice IS NOT NULL AND p.price < p.oldPrice " +
+                    "ORDER BY (p.oldPrice - p.price) DESC",
+                    Product.class);
+            return query.getResultList();
         } catch (Exception e) {
-            System.err.println("Error in findDiscountedProducts(): " + e.getMessage());
+            System.err.println("Xatolik findDiscountedProducts(): " + e.getMessage());
             return Collections.emptyList();
         }
     }
@@ -60,7 +59,7 @@ public class ProductRepository {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
-            throw new RuntimeException("Error saving product: " + e.getMessage(), e);
+            throw new RuntimeException("Saqlashda xatolik: " + e.getMessage(), e);
         }
     }
 }
