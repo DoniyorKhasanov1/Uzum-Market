@@ -1,23 +1,18 @@
-/**
- * Uzum Market JavaScript
- * Handles sticky navbar, carousel, product modal, and region modal with smooth animations
- * Ensures region modal displays 12 regions when triggered
- */
-
-// Sticky Navbar Functionality
+// Fixed Navbar Functionality
 document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     if (header) {
-        const headerOffsetTop = header.offsetTop; // Get header's initial position
+        // Scroll bo‘lganda sinf qo‘shilishi mumkin, lekin qotib turmasin
         window.addEventListener('scroll', () => {
-            if (window.scrollY > headerOffsetTop) {
-                header.classList.add('sticky');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
             } else {
-                header.classList.remove('sticky');
+                header.classList.remove('scrolled');
             }
         });
     }
 });
+
 
 // Carousel Functionality
 const carousel = {
@@ -92,7 +87,8 @@ const productModal = {
             console.warn('Product modal elements not found.');
             return;
         }
-        // Simulate product data fetch (replace with actual API call if needed)
+
+        // Simulate product data fetch
         const product = {
             id: productId,
             image: this.modal.querySelector('.modal-product-image'),
@@ -104,7 +100,7 @@ const productModal = {
             specs: this.modal.querySelector('.modal-product-specs ul')
         };
 
-        // Example: Populate modal with dynamic data (replace with actual data)
+        // Populate modal with data (replace with actual API call)
         product.image.src = `https://images.uzum.uz/product-${productId}.jpg`;
         product.title.textContent = `Mahsulot ${productId}`;
         product.price.textContent = `1,000,000 so'm`;
@@ -131,7 +127,6 @@ const productModal = {
         if (!this.modal || !this.modalContent) return;
         this.modalContent.style.transform = 'translateY(-30px)';
         this.modalContent.style.opacity = '0';
-        this.modal.style.transition = 'opacity 0.3s ease';
         this.modal.style.opacity = '0';
         setTimeout(() => {
             this.modal.style.display = 'none';
@@ -156,15 +151,19 @@ const regionModal = {
             console.warn('Region modal elements not found or incorrect number of regions.');
             return;
         }
+
         this.trigger.addEventListener('click', (e) => {
             e.preventDefault();
             this.open();
         });
+
         this.closeButton.addEventListener('click', () => this.close());
         this.modal.addEventListener('click', (e) => {
             if (e.target === this.modal) this.close();
         });
+
         this.items.forEach((item, index) => {
+            item.textContent = this.regions[index];
             item.addEventListener('click', () => {
                 this.selectRegion(this.regions[index]);
             });
@@ -189,7 +188,6 @@ const regionModal = {
     close() {
         this.modalContent.style.transform = 'scale(0.9)';
         this.modalContent.style.opacity = '0';
-        this.modal.style.transition = 'opacity 0.3s ease';
         this.modal.style.opacity = '0';
         setTimeout(() => {
             this.modal.style.display = 'none';
@@ -199,49 +197,52 @@ const regionModal = {
     selectRegion(regionName) {
         const selectedRegion = document.querySelector('#selectedRegion');
         if (!selectedRegion) return;
+
         selectedRegion.style.transform = 'scale(0.9)';
         selectedRegion.style.opacity = '0.5';
+
         setTimeout(() => {
             selectedRegion.textContent = regionName;
             selectedRegion.style.transition = 'all 0.4s ease-out';
             selectedRegion.style.transform = 'scale(1.1)';
             selectedRegion.style.opacity = '1';
+
             setTimeout(() => {
                 selectedRegion.style.transform = 'scale(1)';
             }, 300);
         }, 150);
+
         this.close();
         console.log(`Tanlangan viloyat: ${regionName}`);
-        // Add AJAX call here if needed for region-based product filtering
-        // Example: fetch(`/api/products?region=${encodeURIComponent(regionName)}`);
     }
 };
 
-// Global Click Handler for Modals
-window.addEventListener('click', (event) => {
-    if (event.target === productModal.modal) {
-        productModal.close();
-    }
-    if (event.target === regionModal.modal) {
-        regionModal.close();
-    }
-});
+// Initialize Event Listeners
+const initializeEventListeners = () => {
+    // Modal close handlers
+    window.addEventListener('click', (event) => {
+        if (event.target === productModal.modal) {
+            productModal.close();
+        }
+        if (event.target === regionModal.modal) {
+            regionModal.close();
+        }
+    });
 
-// Product Card Click Handler
-const initializeProductCards = () => {
+    // Product card click handlers
     const productCards = document.querySelectorAll('.product-card');
     productCards.forEach(card => {
         card.addEventListener('click', (e) => {
             if (e.target.classList.contains('buy-button')) return;
-            const productId = card.dataset.productId || 'default';
+            const productId = card.dataset.productId || Math.floor(Math.random() * 100);
             productModal.open(productId);
         });
     });
 };
 
-// Initialize Everything
+// Initialize All Components
 document.addEventListener('DOMContentLoaded', () => {
     carousel.init();
     regionModal.init();
-    initializeProductCards();
+    initializeEventListeners();
 });
