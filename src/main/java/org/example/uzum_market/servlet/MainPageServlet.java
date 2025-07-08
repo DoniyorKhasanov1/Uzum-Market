@@ -23,16 +23,30 @@ public class MainPageServlet extends HttpServlet {
         try {
             ProductRepository productRepository = new ProductRepository(em);
 
-            List<Product> recommendedProducts = productRepository.findRecommendedProducts();
-            List<Product> discountedProducts = productRepository.findDiscountedProducts();
+            // Pagination parametrlari
+            int page = 0;
+            int size = 10; // Har bir sahifada 10 ta mahsulot
+            try {
+                String pageParam = request.getParameter("page");
+                if (pageParam != null) {
+                    page = Integer.parseInt(pageParam);
+                }
+            } catch (NumberFormatException e) {
+                page = 0;
+            }
 
-            request.setAttribute("recommendedProducts", recommendedProducts);
-            request.setAttribute("discountedProducts", discountedProducts);
+            // Barcha mahsulotlarni olish
+            List<Product> products = productRepository.findAll(page, size);
 
+            // Mahsulotlarni JSP ga uzatish
+            request.setAttribute("products", products);
+            request.setAttribute("currentPage", page);
+
+            // main.jsp ga yo‘naltirish
             request.getRequestDispatcher("/main.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Error loading products: " + e.getMessage());
+            request.setAttribute("errorMessage", "Mahsulotlarni yuklashda xato: " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         } finally {
             em.close();
