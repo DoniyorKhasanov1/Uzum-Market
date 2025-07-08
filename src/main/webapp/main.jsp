@@ -66,7 +66,7 @@
 
 
             <div class="user-actions">
-                <a href="#" class="user-action-item" onclick="openModal()">
+                <a href="#" class="user-action-item" onclick="openLoginModal()">
                     <i class="fas fa-user icon"></i>
                     <span>Kirish</span>
                 </a>
@@ -75,7 +75,7 @@
                 <!-- Kirish Modal (1-step) -->
                 <div id="loginModal" class="modal">
                     <div class="modal-content">
-                        <span class="close" onclick="closeModal()">&times;</span>
+                        <span class="close" onclick="closeLoginModal()">&times;</span>
                         <div class="model-header">
                             <img src="uzum_logo.png" class="logo-img" alt="UzumLogo">
                         </div>
@@ -97,7 +97,7 @@
                 <!-- Kod Tasdiqlash Modal (2-step) -->
                 <div id="verifyModal" class="modal">
                     <div class="modal-content">
-                        <span class="close" onclick="closeModal()">&times;</span>
+                        <span class="close" onclick="closeLoginModal()">&times;</span>
                         <h2>Kod kiriting</h2>
                         <form id="verifyForm">
                             <input type="text" id="verificationCode" name="code" placeholder="Kodni kiriting" required>

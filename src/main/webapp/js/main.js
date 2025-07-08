@@ -194,9 +194,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     //Login form uchun Modal funksiyalari
-    function openModal() {
+
+    function openLoginModal(){
         document.getElementById("loginModal").style.display = "block";
     }
+
     const loginModal = document.getElementById('loginModal');
     const verifyModal = document.getElementById('verifyModal');
 
@@ -218,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Kiritilgan kod:', code);
     });
 
-    function closeModal() {
+    function closeLoginModal() {
         loginModal.style.display = 'none';
         verifyModal.style.display = 'none';
     }
