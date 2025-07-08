@@ -192,4 +192,34 @@ document.addEventListener('DOMContentLoaded', function() {
             regionModal.classList.remove('active');
         });
     });
+
+    //Login form uchun Modal funksiyalari
+    function openModal() {
+        document.getElementById("loginModal").style.display = "block";
+    }
+    const loginModal = document.getElementById('loginModal');
+    const verifyModal = document.getElementById('verifyModal');
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        console.log('Ism:', name, 'Email:', email);
+
+        loginModal.style.display = 'none';
+        verifyModal.style.display = 'block';
+    });
+
+    document.getElementById('verifyForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const code = document.getElementById('verificationCode').value;
+        console.log('Kiritilgan kod:', code);
+    });
+
+    function closeModal() {
+        loginModal.style.display = 'none';
+        verifyModal.style.display = 'none';
+    }
 });
