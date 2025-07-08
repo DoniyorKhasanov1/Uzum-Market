@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -11,12 +12,63 @@ body {
     background-color: #f7f9fc;
     color: #2d2d2d;
     line-height: 1.6;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .container {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+/* Loading Animation */
+.loading-spinner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.loading-spinner.active {
+    display: flex;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(107, 72, 255, 0.2);
+    border-radius: 50%;
+    border-top-color: #6b48ff;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #6b48ff;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
 /* Welcome Message */
@@ -47,7 +99,7 @@ body {
     to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
 }
 
-/* Header Styles */
+/* Header Styles with Floating Animation */
 header {
     background: linear-gradient(135deg, #ffffff, #f0f4ff);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -55,7 +107,12 @@ header {
     z-index: 1000;
     padding: 15px 0;
     transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-    animation: slideInDown 0.5s ease-out;
+    animation: slideInDown 0.5s ease-out, floatHeader 6s ease-in-out infinite;
+}
+
+@keyframes floatHeader {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
 }
 
 header.sticky {
@@ -65,6 +122,7 @@ header.sticky {
     background: #ffffff;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     transform: translateY(0);
+    animation: none;
 }
 
 @keyframes slideInDown {
@@ -86,17 +144,26 @@ header.sticky {
     color: #4a4a4a;
     cursor: pointer;
     transition: color 0.3s ease, opacity 0.3s ease;
+    animation: pulse 2s infinite;
 }
 
 .header-location i {
     font-size: 18px;
     color: #6b48ff;
     margin-right: 8px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+    60% { transform: translateY(-3px); }
 }
 
 .header-location:hover {
     color: #a855f7;
     opacity: 0.9;
+    animation: none;
 }
 
 .header-links {
@@ -118,6 +185,7 @@ header.sticky {
     font-size: 16px;
     color: #6b48ff;
     margin-right: 6px;
+    transition: transform 0.3s ease;
 }
 
 .header-link:hover {
@@ -127,6 +195,7 @@ header.sticky {
 
 .header-link:hover i {
     color: #a855f7;
+    transform: scale(1.2);
 }
 
 .header-main {
@@ -144,6 +213,13 @@ header.sticky {
     -webkit-text-fill-color: transparent;
     text-transform: uppercase;
     letter-spacing: 2px;
+    animation: colorFlow 4s linear infinite;
+    background-size: 200% auto;
+}
+
+@keyframes colorFlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 100% center; }
 }
 
 .catalog-button {
@@ -159,16 +235,29 @@ header.sticky {
     font-weight: 600;
     box-shadow: 0 4px 15px rgba(107, 72, 255, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: pulseScale 2s infinite;
+}
+
+@keyframes pulseScale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 .catalog-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.05);
     box-shadow: 0 6px 20px rgba(107, 72, 255, 0.6);
+    animation: none;
 }
 
 .catalog-button svg {
     margin-right: 10px;
     stroke: #fff;
+    animation: swing 2s infinite;
+}
+
+@keyframes swing {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
 }
 
 .search-bar {
@@ -190,6 +279,12 @@ header.sticky {
     border-color: #6b48ff;
     box-shadow: 0 0 10px rgba(107, 72, 255, 0.2);
     outline: none;
+    animation: inputGlow 1.5s infinite alternate;
+}
+
+@keyframes inputGlow {
+    from { box-shadow: 0 0 10px rgba(107, 72, 255, 0.2); }
+    to { box-shadow: 0 0 15px rgba(107, 72, 255, 0.4); }
 }
 
 .search-bar .search-icon {
@@ -204,6 +299,7 @@ header.sticky {
 
 .search-bar input:focus + .search-icon {
     color: #a855f7;
+    animation: bounce 0.5s;
 }
 
 .user-actions {
@@ -219,12 +315,14 @@ header.sticky {
     font-size: 14px;
     font-weight: 500;
     transition: color 0.3s ease, opacity 0.3s ease;
+    position: relative;
 }
 
 .user-action-item i {
     font-size: 18px;
     color: #6b48ff;
     margin-right: 8px;
+    transition: transform 0.3s ease;
 }
 
 .user-action-item:hover {
@@ -234,6 +332,19 @@ header.sticky {
 
 .user-action-item:hover i {
     color: #a855f7;
+    transform: translateY(-3px);
+}
+
+.user-action-item .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-size: 10px;
+    animation: pulse 1.5s infinite;
 }
 
 .header-categories {
@@ -258,6 +369,7 @@ header.sticky {
     background-color: #6b48ff;
     color: #fff;
     opacity: 0.9;
+    transform: translateY(-2px);
 }
 
 /* Region Modal */
@@ -283,7 +395,12 @@ header.sticky {
     border-radius: 20px;
     position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    animation: zoomIn 0.3s ease;
+    animation: zoomIn 0.3s ease, floatModal 4s ease-in-out infinite;
+}
+
+@keyframes floatModal {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 @keyframes zoomIn {
@@ -315,6 +432,7 @@ header.sticky {
 .close-region-modal:hover {
     color: #6b48ff;
     opacity: 0.9;
+    transform: rotate(90deg);
 }
 
 .region-grid {
@@ -337,14 +455,14 @@ header.sticky {
 }
 
 .region-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.05);
     box-shadow: 0 8px 20px rgba(107, 72, 255, 0.4);
     background: linear-gradient(90deg, #6b48ff, #a855f7);
     color: #fff;
     opacity: 0.9;
 }
 
-/* Carousel */
+/* Carousel with Enhanced Animations */
 .carousel-container {
     position: relative;
     overflow: hidden;
@@ -360,6 +478,7 @@ header.sticky {
 
 .carousel-slide {
     min-width: 100%;
+    position: relative;
 }
 
 .carousel-slide img {
@@ -367,11 +486,12 @@ header.sticky {
     height: 400px;
     object-fit: cover;
     border-radius: 20px;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.5s ease;
 }
 
-.carousel-slide img:hover {
+.carousel-slide:hover img {
     opacity: 0.9;
+    transform: scale(1.02);
 }
 
 .carousel-arrow {
@@ -385,12 +505,14 @@ header.sticky {
     cursor: pointer;
     border-radius: 50%;
     font-size: 18px;
-    transition: background 0.3s ease, opacity 0.3s ease;
+    transition: background 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0.7;
 }
 
 .carousel-arrow:hover {
     background: linear-gradient(90deg, #a855f7, #6b48ff);
-    opacity: 0.9;
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
 }
 
 .carousel-arrow.left {
@@ -417,15 +539,20 @@ header.sticky {
     border: 2px solid #6b48ff;
     border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
 }
 
 .carousel-indicator.active {
     background-color: #6b48ff;
     opacity: 1;
+    transform: scale(1.2);
 }
 
-/* Feature Blocks */
+.carousel-indicator:hover {
+    transform: scale(1.3);
+}
+
+/* Feature Blocks with Hover Effects */
 .feature-blocks {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -440,10 +567,27 @@ header.sticky {
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(107, 72, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.feature-block:hover::before {
+    left: 100%;
 }
 
 .feature-block:hover {
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(1.03);
     box-shadow: 0 10px 30px rgba(107, 72, 255, 0.3);
     opacity: 0.9;
 }
@@ -452,15 +596,22 @@ header.sticky {
     font-size: 28px;
     color: #6b48ff;
     margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.feature-block:hover .icon {
+    transform: rotate(15deg) scale(1.2);
 }
 
 .feature-block span {
     font-size: 16px;
     font-weight: 500;
     color: #2d2d2d;
+    position: relative;
+    z-index: 1;
 }
 
-/* Uzum Card Banner */
+/* Uzum Card Banner with Floating Animation */
 .uzum-card-banner {
     background: linear-gradient(90deg, #6b48ff, #a855f7);
     color: #fff;
@@ -468,7 +619,30 @@ header.sticky {
     border-radius: 20px;
     margin: 30px 0;
     box-shadow: 0 10px 30px rgba(107, 72, 255, 0.4);
-    animation: fadeInUp 0.5s ease;
+    animation: fadeInUp 0.5s ease, floatBanner 6s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes floatBanner {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.uzum-card-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    animation: rotateGradient 15s linear infinite;
+}
+
+@keyframes rotateGradient {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @keyframes fadeInUp {
@@ -480,12 +654,20 @@ header.sticky {
     display: flex;
     align-items: center;
     gap: 30px;
+    position: relative;
+    z-index: 1;
 }
 
 .uzum-card-text h1 {
     font-size: 28px;
     font-weight: 700;
     margin: 0 0 15px;
+    animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+    from { text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+    to { text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
 }
 
 .uzum-card-text h2 {
@@ -505,30 +687,46 @@ header.sticky {
     align-items: center;
     margin-bottom: 10px;
     font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.uzum-card-features li:hover {
+    transform: translateX(10px);
 }
 
 .uzum-card-features i {
     font-size: 18px;
     margin-right: 12px;
     color: #ffeb3b;
+    animation: swing 2s infinite;
 }
 
 .uzum-card-features li:hover i {
     color: #fff;
+    animation: none;
+    transform: scale(1.2);
 }
 
 .uzum-card-image img {
     max-width: 250px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.5s ease;
+    animation: floatImage 4s ease-in-out infinite;
+}
+
+@keyframes floatImage {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 .uzum-card-image img:hover {
     opacity: 0.9;
+    transform: scale(1.05) rotate(2deg);
+    animation: none;
 }
 
-/* Product Grid */
+/* Product Grid with Staggered Animations */
 .section-title {
     display: flex;
     justify-content: space-between;
@@ -543,6 +741,23 @@ header.sticky {
     background: linear-gradient(90deg, #6b48ff, #a855f7);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #6b48ff, #a855f7);
+    animation: underlineExpand 2s infinite alternate;
+}
+
+@keyframes underlineExpand {
+    from { width: 50px; }
+    to { width: 100px; }
 }
 
 .section-title a {
@@ -558,10 +773,16 @@ header.sticky {
 .section-title a:hover {
     color: #a855f7;
     opacity: 0.9;
+    transform: translateX(5px);
 }
 
 .section-title a i {
     margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.section-title a:hover i {
+    transform: translateX(5px);
 }
 
 .products-grid {
@@ -577,27 +798,42 @@ header.sticky {
     overflow: hidden;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
+/* Staggered animations for product cards */
+.products-grid .product-card:nth-child(1) { animation-delay: 0.1s; }
+.products-grid .product-card:nth-child(2) { animation-delay: 0.2s; }
+.products-grid .product-card:nth-child(3) { animation-delay: 0.3s; }
+.products-grid .product-card:nth-child(4) { animation-delay: 0.4s; }
+.products-grid .product-card:nth-child(5) { animation-delay: 0.5s; }
+.products-grid .product-card:nth-child(6) { animation-delay: 0.6s; }
+.products-grid .product-card:nth-child(7) { animation-delay: 0.7s; }
+.products-grid .product-card:nth-child(8) { animation-delay: 0.8s; }
+
 .product-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(1.02);
     box-shadow: 0 10px 30px rgba(107, 72, 255, 0.3);
     opacity: 0.9;
 }
 
 .product-image-container {
     position: relative;
+    overflow: hidden;
 }
 
 .product-image {
     width: 100%;
     height: 220px;
     object-fit: cover;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.5s ease;
 }
 
 .product-card:hover .product-image {
     opacity: 0.9;
+    transform: scale(1.1);
 }
 
 .discount-badge,
@@ -610,9 +846,9 @@ header.sticky {
     font-size: 13px;
     font-weight: 500;
     border-radius: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0
-
-    , 0, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    animation: pulse 1.5s infinite;
 }
 
 .discount-badge {
@@ -645,6 +881,11 @@ header.sticky {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    transition: color 0.3s ease;
+}
+
+.product-card:hover .product-name {
+    color: #6b48ff;
 }
 
 .product-rating {
@@ -657,6 +898,7 @@ header.sticky {
     color: #ffeb3b;
     font-size: 14px;
     margin-right: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .product-rating span {
@@ -698,15 +940,32 @@ header.sticky {
     font-weight: 600;
     box-shadow: 0 4px 15px rgba(107, 72, 255, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.buy-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.buy-button:hover::before {
+    left: 100%;
 }
 
 .buy-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 6px 20px rgba(107, 72, 255, 0.6);
     opacity: 0.9;
 }
 
-/* Product Modal */
+/* Product Modal with Enhanced Animations */
 .product-modal {
     display: none;
     position: fixed;
@@ -718,6 +977,7 @@ header.sticky {
     z-index: 1000;
     align-items: center;
     justify-content: center;
+    animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
@@ -728,7 +988,23 @@ header.sticky {
     width: 90%;
     position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    animation: zoomIn 0.3s ease;
+    animation: zoomIn 0.3s ease, floatModal 4s ease-in-out infinite;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #6b48ff;
+    border-radius: 10px;
 }
 
 .close-modal {
@@ -738,12 +1014,13 @@ header.sticky {
     font-size: 24px;
     color: #4a4a4a;
     cursor: pointer;
-    transition: color 0.3s ease, opacity 0.3s ease;
+    transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
 }
 
 .close-modal:hover {
     color: #6b48ff;
     opacity: 0.9;
+    transform: rotate(90deg);
 }
 
 .modal-product-image {
@@ -754,10 +1031,13 @@ header.sticky {
     margin-bottom: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: opacity 0.3s ease;
+    animation: floatImage 4s ease-in-out infinite;
 }
 
 .modal-product-image:hover {
     opacity: 0.9;
+    animation: none;
+    transform: scale(1.02);
 }
 
 .modal-product-title {
@@ -765,6 +1045,17 @@ header.sticky {
     font-weight: 700;
     color: #2d2d2d;
     margin-bottom: 15px;
+    position: relative;
+}
+
+.modal-product-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, #6b48ff, #a855f7);
 }
 
 .modal-product-price {
@@ -772,6 +1063,7 @@ header.sticky {
     font-weight: 700;
     color: #2d2d2d;
     margin-bottom: 12px;
+    animation: pulse 1.5s infinite;
 }
 
 .modal-product-old-price {
@@ -797,6 +1089,19 @@ header.sticky {
     font-weight: 600;
     color: #2d2d2d;
     margin-bottom: 15px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.modal-product-specs h4::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px;
+    height: 20px;
+    width: 5px;
+    background: linear-gradient(to bottom, #6b48ff, #a855f7);
+    border-radius: 5px;
 }
 
 .modal-product-specs ul {
@@ -810,6 +1115,12 @@ header.sticky {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    padding-left: 10px;
+    transition: transform 0.3s ease;
+}
+
+.modal-product-specs li:hover {
+    transform: translateX(10px);
 }
 
 .modal-product-specs li::before {
@@ -818,9 +1129,54 @@ header.sticky {
     font-weight: 900;
     color: #6b48ff;
     margin-right: 10px;
+    transition: transform 0.3s ease;
 }
 
-/* Responsive Design */
+.modal-product-specs li:hover::before {
+    transform: scale(1.2);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.modal-buy-button,
+.modal-wishlist-button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-buy-button {
+    background: linear-gradient(90deg, #6b48ff, #a855f7);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(107, 72, 255, 0.4);
+}
+
+.modal-wishlist-button {
+    background: #fff;
+    color: #6b48ff;
+    border: 2px solid #6b48ff;
+}
+
+.modal-buy-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 72, 255, 0.6);
+}
+
+.modal-wishlist-button:hover {
+    transform: translateY(-2px);
+    background: #f0f4ff;
+}
+
+/* Responsive Design with Animation Adjustments */
 @media (max-width: 768px) {
     .header-main {
         flex-direction: column;
@@ -849,6 +1205,12 @@ header.sticky {
 
     .uzum-card-image img {
         max-width: 100%;
+        animation: floatImageMobile 4s ease-in-out infinite;
+    }
+
+    @keyframes floatImageMobile {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
     }
 
     .carousel-slide img {
@@ -862,6 +1224,15 @@ header.sticky {
     .welcome-message {
         font-size: 16px;
         padding: 12px 20px;
+    }
+
+    .modal-content {
+        animation: zoomInMobile 0.3s ease;
+    }
+
+    @keyframes zoomInMobile {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
     }
 }
 
@@ -892,10 +1263,136 @@ header.sticky {
 
     .region-modal-content {
         padding: 20px;
+        animation: zoomInSmall 0.3s ease;
+    }
+
+    @keyframes zoomInSmall {
+        from { transform: scale(0.95); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
     }
 
     .welcome-message {
         font-size: 14px;
         padding: 10px 15px;
     }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+}
+
+/* Floating Animation for Multiple Elements */
+@keyframes floatElement {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Additional Micro-interactions */
+button, .button, a, input[type="submit"], .clickable {
+    transition: all 0.3s ease;
+}
+
+button:hover, .button:hover, a:hover, input[type="submit"]:hover, .clickable:hover {
+    transform: translateY(-2px);
+}
+
+/* Hover effects for icons */
+i.fas, i.far, i.fab, i.feather {
+    transition: transform 0.3s ease;
+}
+
+i.fas:hover, i.far:hover, i.fab:hover, i.feather:hover {
+    transform: scale(1.2);
+}
+
+/* Ripple effect for buttons */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .5s, opacity 1s;
+}
+
+.ripple:active:after {
+    transform: scale(0, 0);
+    opacity: .3;
+    transition: 0s;
+}
+
+/* Shake animation for error states */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+/* Bounce animation for notifications */
+@keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.bounce-in {
+    animation: bounceIn 0.5s;
+}
+
+/* Fade in from left */
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.fade-in-left {
+    animation: fadeInLeft 0.5s;
+}
+
+/* Fade in from right */
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.fade-in-right {
+    animation: fadeInRight 0.5s;
+}
+
+/* Rotate animation */
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.rotate {
+    animation: rotate 2s linear infinite;
+}
+
+/* Pulse animation for attention */
+@keyframes pulseAttention {
+    0% { box-shadow: 0 0 0 0 rgba(107, 72, 255, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(107, 72, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(107, 72, 255, 0); }
+}
+
+.pulse-attention {
+    animation: pulseAttention 1.5s infinite;
 }
