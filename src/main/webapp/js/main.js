@@ -232,7 +232,7 @@ const initializeProductCards = () => {
     const productCards = document.querySelectorAll('.product-card');
     productCards.forEach(card => {
         card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('buy-button')) return; // Ignore buy button clicks
+            if (e.target.classList.contains('buy-button')) return;
             const productId = card.dataset.productId || 'default';
             productModal.open(productId);
         });

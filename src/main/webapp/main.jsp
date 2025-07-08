@@ -7,7 +7,7 @@
     <title>Uzum Market - O'zbekistondagi eng yirik marketpleys</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -20,7 +20,7 @@
             </div>
             <div class="region-modal" id="regionModal">
                 <div class="region-modal-content">
-                    <span class="close-region-modal">&times;</span>
+                    <span class="close-region-modal">×</span>
                     <h2>Viloyatni Tanlang</h2>
                     <div class="region-grid">
                         <div class="region-item">Toshkent</div>
@@ -81,10 +81,14 @@
             <a href="#" class="category">Poyabzallar</a>
             <a href="#" class="category">Aksessuarlar</a>
             <a href="#" class="category">Go'zallik va parvarish</a>
-            <a href="#" class="category">Barchasi</a>
+            <a href="#" class="category">Salomatlik</a>
+            <a href="#" class="category">Bog' va tomorqa</a>
         </div>
     </div>
 </header>
+<div class="welcome-message" id="welcomeMessage">
+    <span>Welcome User to G52 Project</span>
+</div>
 <main class="main-content">
     <div class="container">
         <div class="carousel-container">
@@ -295,7 +299,7 @@
         </c:choose>
         <div class="product-modal" id="productModal">
             <div class="modal-content">
-                <span class="close-modal">&times;</span>
+                <span class="close-modal">×</span>
                 <img src="" alt="Mahsulot rasmi" class="modal-product-image" id="modalProductImage">
                 <h2 class="modal-product-title" id="modalProductTitle"></h2>
                 <div class="modal-product-price" id="modalProductPrice"></div>
@@ -311,6 +315,6 @@
         </div>
     </div>
 </main>
-<script src="/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>
