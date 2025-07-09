@@ -19,8 +19,8 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
+        //Used try with resources to close EntityManager automatically
+        try (EntityManager em = JPAUtil.getEntityManager()) {
             ProductRepository productRepository = new ProductRepository(em);
 
             // Pagination parametrlari
@@ -48,8 +48,6 @@ public class MainPageServlet extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Mahsulotlarni yuklashda xato: " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
-        } finally {
-            em.close();
         }
     }
 }
