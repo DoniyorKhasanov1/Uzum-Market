@@ -11,7 +11,7 @@ import org.example.uzum_market.entity.Product;
 import org.example.uzum_market.repository.ProductRepository;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 @WebServlet(name = "mainPageServlet", value = "/main")
 public class MainPageServlet extends HttpServlet {
@@ -19,32 +19,33 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+
         //Used try with resources to close EntityManager automatically
-        try (EntityManager em = JPAUtil.getEntityManager()) {
+      //EntityManagerni try-with-resources qilish kerak edi
+        try (EntityManager em = JPAUtil.getEntityManager()) 
             ProductRepository productRepository = new ProductRepository(em);
 
-            // Pagination parametrlari
-            int page = 0;
-            int size = 10; // Har bir sahifada 10 ta mahsulot
-            try {
-                String pageParam = request.getParameter("page");
-                if (pageParam != null) {
-                    page = Integer.parseInt(pageParam);
-                }
-            } catch (NumberFormatException e) {
-                page = 0;
+            em.getTransaction().begin();
+            List<Product> allProducts = productRepository.findAll(0, Integer.MAX_VALUE);
+            List<Product> recommendedProducts = productRepository.findRecommendedProducts();
+            List<Product> discountedProducts = productRepository.findDiscountedProducts();
+            em.getTransaction().commit();
+
+            Map<String, List<Product>> productsByCategory = new LinkedHashMap<>();
+            for (Product product : allProducts) {
+                String category = product.getCategory() != null ? product.getCategory() : "Other";
+                productsByCategory.computeIfAbsent(category, k -> new ArrayList<>()).add(product);
             }
 
-            // Barcha mahsulotlarni olish
-            List<Product> products = productRepository.findAll(page, size);
+            request.setAttribute("recommendedProducts", recommendedProducts);
+            request.setAttribute("discountedProducts", discountedProducts);
+            request.setAttribute("productsByCategory", productsByCategory);
 
-            // Mahsulotlarni JSP ga uzatish
-            request.setAttribute("products", products);
-            request.setAttribute("currentPage", page);
-
-            // main.jsp ga yo‘naltirish
             request.getRequestDispatcher("/main.jsp").forward(request, response);
         } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             e.printStackTrace();
             request.setAttribute("errorMessage", "Mahsulotlarni yuklashda xato: " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
