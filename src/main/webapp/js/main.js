@@ -90,7 +90,8 @@ const productModal = {
                 oldPrice: this.modal.querySelector('.modal-product-old-price'),
                 rating: this.modal.querySelector('.modal-product-rating'),
                 description: this.modal.querySelector('.modal-product-description'),
-                specs: this.modal.querySelector('.modal-product-specs ul')
+                specs: this.modal.querySelector('.modal-product-specs ul'),
+                productId: this.modal.querySelector('#modalProductId')
             };
 
             productElements.image.src = product.imageUrl || 'https://via.placeholder.com/300';
@@ -103,6 +104,7 @@ const productModal = {
             productElements.description.textContent = product.description || 'Bu mahsulotning ta\'rifi mavjud emas.';
             productElements.specs.innerHTML = product.specs ? product.specs.map(spec => `<li>${spec}</li>`).join('') :
                 '<li>Rang: Qora</li><li>Hajm: 128GB</li><li>Garantiya: 1 yil</li>';
+            productElements.productId.value = product.id;
 
             // Show modal with animation
             this.modal.style.display = 'flex';
@@ -278,7 +280,10 @@ function updateProductGrid(products) {
                 <div class="product-price">${product.price.toLocaleString()} so'm</div>
                 ${product.oldPrice ? `<div class="product-old-price">${product.oldPrice.toLocaleString()} so'm</div>` : ''}
                 ${product.hasCredit ? `<div class="product-credit">${product.creditPricePerMonth.toLocaleString()} so'm/oy</div>` : ''}
-                <button class="buy-button">Sotib olish</button>
+                <form action="/cart/add" method="post">
+                    <input type="hidden" name="productId" value="${product.id}">
+                    <button type="submit" class="buy-button">Sotib olish</button>
+                </form>
             </div>
         </div>
     `).join('');
@@ -301,7 +306,7 @@ const initializeProductCards = () => {
     const productCards = document.querySelectorAll('.product-card');
     productCards.forEach(card => {
         card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('buy-button')) return;
+            if (e.target.classList.contains('buy-button') || e.target.closest('form')) return;
             const productId = card.dataset.productId || 'default';
             productModal.open(productId);
         });
