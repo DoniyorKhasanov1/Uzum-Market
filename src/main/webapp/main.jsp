@@ -82,7 +82,6 @@
             <a href="#" class="category">Aksessuarlar</a>
             <a href="#" class="category">Go'zallik va parvarish</a>
             <a href="#" class="category">Salomatlik</a>
-            <a href="#" class="category">Bog' va tomorqa</a>
         </div>
     </div>
 </header>
@@ -94,19 +93,24 @@
         <div class="carousel-container">
             <div class="carousel-inner" id="carouselInner">
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1" loading="lazy">
+                    <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1"
+                         loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2" loading="lazy">
+                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2"
+                         loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 3" loading="lazy">
+                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 3"
+                         loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Promo Banner 4" loading="lazy">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Promo Banner 4"
+                         loading="lazy">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/clga9ofn7c6qm23k8mkg/main_page_banner.jpg" alt="Promo Banner 5" loading="lazy">
+                    <img src="https://images.uzum.uz/clga9ofn7c6qm23k8mkg/main_page_banner.jpg" alt="Promo Banner 5"
+                         loading="lazy">
                 </div>
             </div>
             <button class="carousel-arrow left"><i class="fas fa-chevron-left"></i></button>

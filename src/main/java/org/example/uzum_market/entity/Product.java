@@ -42,6 +42,4 @@ public class Product {
 
     @Column(name = "is_recommended")
     private Boolean isRecommended;
-
-
 }
