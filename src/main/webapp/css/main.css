@@ -934,3 +934,133 @@ header {
         padding: 10px 15px;
     }
 }
+
+/* Neon Gradient Animation for Text */
+.neon-text {
+    animation: neonGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes neonGlow {
+    from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #6b48ff, 0 0 20px #6b48ff, 0 0 25px #6b48ff;
+    }
+    to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #a855f7, 0 0 40px #a855f7, 0 0 50px #a855f7;
+    }
+}
+
+/* Subtle Hover Effects */
+.btn-hover-effect {
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.btn-hover-effect:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(107, 72, 255, 0.3);
+}
+
+/* Floating Animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.floating-item {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse-effect {
+    animation: pulse 2s infinite;
+}
+
+/* Gradient Border Animation */
+.gradient-border {
+    position: relative;
+    border-radius: 15px;
+}
+
+.gradient-border::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #6b48ff, #a855f7, #6b48ff);
+    background-size: 200% 200%;
+    z-index: -1;
+    border-radius: 17px;
+    animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Logo uchun neon animatsiya */
+.logo {
+    animation: neonGlow 3s ease-in-out infinite alternate;
+}
+
+
+/* Uzum card banner uchun suzuvchi animatsiya */
+.uzum-card-banner {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Feature blocklar uchun pulse effekt */
+.feature-block:hover {
+    animation: pulse 1.5s;
+}
+
+/* Mahsulot kartalari uchun gradient chegarasi */
+.product-card {
+    position: relative;
+}
+
+.product-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 17px;
+    background: linear-gradient(45deg, #6b48ff, #a855f7, #6b48ff);
+    background-size: 200% 200%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover::after {
+    opacity: 1;
+    animation: gradientMove 3s ease infinite;
+}
+
+@media (max-width: 768px) {
+    /* Mobil qurilmalarda animatsiyalarni soddalashtirish */
+    .logo {
+        animation: none;
+        text-shadow: none;
+    }
+
+    .product-card::after,
+    .gradient-border::after {
+        display: none;
+    }
+
+    .floating-item {
+        animation: none;
+    }
+}
