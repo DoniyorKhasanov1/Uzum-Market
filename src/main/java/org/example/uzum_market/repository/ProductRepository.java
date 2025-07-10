@@ -1,6 +1,7 @@
 package org.example.uzum_market.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.example.uzum_market.entity.Product;
 import org.slf4j.Logger;
@@ -30,6 +31,21 @@ public class ProductRepository {
         }
     }
 
+    public Product findById(Long id) {
+        try {
+            TypedQuery<Product> query = entityManager.createQuery(
+                    "SELECT p FROM Product p WHERE p.id = :id", Product.class);
+            query.setParameter("id", id);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            logger.warn("Mahsulot topilmadi, id: {}", id);
+            return null;
+        } catch (Exception e) {
+            logger.error("Xatolik findById metodida (id: {}): {}", id, e.getMessage(), e);
+            throw e;
+        }
+    }
+
     public List<Product> findRecommendedProducts() {
         try {
             TypedQuery<Product> query = entityManager.createQuery(
@@ -50,6 +66,32 @@ public class ProductRepository {
             return query.getResultList();
         } catch (Exception e) {
             logger.error("Xatolik findDiscountedProducts metodida: {}", e.getMessage(), e);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Product> searchProducts(String query) {
+        try {
+            TypedQuery<Product> typedQuery = entityManager.createQuery(
+                    "SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:query) ORDER BY p.id DESC",
+                    Product.class);
+            typedQuery.setParameter("query", "%" + query + "%");
+            return typedQuery.getResultList();
+        } catch (Exception e) {
+            logger.error("Xatolik searchProducts metodida (query: {}): {}", query, e.getMessage(), e);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Product> findByRegion(String region) {
+        try {
+            TypedQuery<Product> query = entityManager.createQuery(
+                    "SELECT p FROM Product p WHERE p.region = :region ORDER BY p.id DESC",
+                    Product.class);
+            query.setParameter("region", region);
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Xatolik findByRegion metodida (region: {}): {}", region, e.getMessage(), e);
             return Collections.emptyList();
         }
     }

@@ -21,46 +21,44 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Product> recommendedProducts = new ArrayList<>();
-        List<Product> discountedProducts = new ArrayList<>();
+        List<Product> allProducts = new ArrayList<>();
+        String category = request.getParameter("category");
         String errorMessage = null;
 
         try {
             Class.forName("org.postgresql.Driver");
-
             try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {
 
-                // BARCHA mahsulotlarni eng yangi tartibda olish
-                String recommendedSql = "SELECT * FROM products ORDER BY id DESC";
-                try (PreparedStatement pstmt = conn.prepareStatement(recommendedSql);
-                     ResultSet rs = pstmt.executeQuery()) {
-                    while (rs.next()) {
-                        Product product = mapResultSetToProduct(rs);
-                        recommendedProducts.add(product);
-                    }
+                String sql;
+                if (category != null && !category.isEmpty()) {
+                    sql = "SELECT * FROM products WHERE LOWER(category) = LOWER(?) ORDER BY id DESC";
+                } else {
+                    sql = "SELECT * FROM products ORDER BY id DESC";
                 }
 
-                // BARCHA chegirmali mahsulotlar
-                String discountedSql = "SELECT * FROM products WHERE old_price IS NOT NULL AND price < old_price ORDER BY (old_price - price) DESC";
-                try (PreparedStatement pstmt = conn.prepareStatement(discountedSql);
-                     ResultSet rs = pstmt.executeQuery()) {
-                    while (rs.next()) {
-                        Product product = mapResultSetToProduct(rs);
-                        discountedProducts.add(product);
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    if (category != null && !category.isEmpty()) {
+                        pstmt.setString(1, category);
+                    }
+
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        while (rs.next()) {
+                            Product product = mapResultSetToProduct(rs);
+                            allProducts.add(product);
+                        }
                     }
                 }
 
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            errorMessage = "PostgreSQL JDBC driver topilmadi. Xato: " + e.getMessage();
+            errorMessage = "PostgreSQL driver topilmadi: " + e.getMessage();
         } catch (SQLException e) {
             e.printStackTrace();
-            errorMessage = "Ma'lumotlar bazasi ulanishi yoki so'rov xatosi: " + e.getMessage();
+            errorMessage = "Bazaga ulanishda xatolik: " + e.getMessage();
         }
 
-        request.setAttribute("recommendedProducts", recommendedProducts);
-        request.setAttribute("discountedProducts", discountedProducts);
+        request.setAttribute("allProducts", allProducts);
         if (errorMessage != null) {
             request.setAttribute("errorMessage", errorMessage);
         }

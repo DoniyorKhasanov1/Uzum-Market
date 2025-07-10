@@ -1,230 +1,322 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Utility function to toggle body scroll
-    const toggleBodyScroll = (disable) => {
-        document.body.classList.toggle('no-scroll', disable);
-    };
+// Carousel Functionality
+const carousel = {
+    currentSlide: 0,
+    slides: document.querySelectorAll('.carousel-slide'),
+    totalSlides: document.querySelectorAll('.carousel-slide').length,
+    carouselInner: document.querySelector('.carousel-inner'),
+    indicators: document.querySelectorAll('.carousel-indicator'),
+    autoSlideInterval: null,
 
-    // Fixed Navbar Functionality
-    const header = document.querySelector('header');
-    if (header) {
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('sticky', window.scrollY > 50);
+    init() {
+        if (this.totalSlides === 0) {
+            console.warn('No carousel slides found.');
+            return;
+        }
+        this.carouselInner.style.transition = 'transform 0.6s ease-in-out';
+        this.updateCarousel();
+        this.startAutoSlide();
+        this.bindEvents();
+    },
+
+    updateCarousel() {
+        this.carouselInner.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+        this.indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === this.currentSlide);
+        });
+    },
+
+    moveSlide(direction) {
+        this.currentSlide = (this.currentSlide + direction + this.totalSlides) % this.totalSlides;
+        this.updateCarousel();
+        this.resetAutoSlide();
+    },
+
+    goToSlide(index) {
+        if (index >= 0 && index < this.totalSlides) {
+            this.currentSlide = index;
+            this.updateCarousel();
+            this.resetAutoSlide();
+        }
+    },
+
+    startAutoSlide() {
+        this.autoSlideInterval = setInterval(() => {
+            this.moveSlide(1);
+        }, 5000);
+    },
+
+    resetAutoSlide() {
+        clearInterval(this.autoSlideInterval);
+        this.startAutoSlide();
+    },
+
+    bindEvents() {
+        const leftArrow = document.querySelector('.carousel-arrow.left');
+        const rightArrow = document.querySelector('.carousel-arrow.right');
+        if (leftArrow) leftArrow.addEventListener('click', () => this.moveSlide(-1));
+        if (rightArrow) rightArrow.addEventListener('click', () => this.moveSlide(1));
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => this.goToSlide(index));
         });
     }
+};
 
-    // Carousel Functionality
-    const carousel = {
-        currentSlide: 0,
-        elements: {
-            slides: document.querySelectorAll('.carousel-slide'),
-            inner: document.querySelector('.carousel-inner'),
-            indicators: document.querySelectorAll('.carousel-indicator'),
-            leftArrow: document.querySelector('.carousel-arrow.left'),
-            rightArrow: document.querySelector('.carousel-arrow.right'),
-        },
-        autoSlideInterval: null,
+// Product Modal Functionality
+const productModal = {
+    modal: document.getElementById('productModal'),
+    modalContent: document.querySelector('.modal-content'),
+    loadingSpinner: document.querySelector('.loading-spinner'),
 
-        init() {
-            if (!this.elements.slides.length) {
-                console.warn('No carousel slides found.');
-                return;
-            }
-            this.elements.inner.style.transition = 'transform 0.6s ease-in-out';
-            this.update();
-            this.startAutoSlide();
-            this.bindEvents();
-        },
+    async open(productId) {
+        if (!this.modal || !this.modalContent) {
+            console.warn('Product modal elements not found.');
+            return;
+        }
 
-        update() {
-            this.elements.inner.style.transform = `translateX(-${this.currentSlide * 100}%)`;
-            this.elements.indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === this.currentSlide);
-            });
-        },
+        // Show loading spinner
+        this.showLoadingSpinner();
 
-        moveSlide(direction) {
-            const totalSlides = this.elements.slides.length;
-            this.currentSlide = (this.currentSlide + direction + totalSlides) % totalSlides;
-            this.update();
-            this.resetAutoSlide();
-        },
+        try {
+            // Fetch product data from the server
+            const response = await fetch(`/api/product?id=${encodeURIComponent(productId)}`);
+            if (!response.ok) throw new Error('Failed to fetch product data');
+            const product = await response.json();
 
-        goToSlide(index) {
-            if (index >= 0 && index < this.elements.slides.length) {
-                this.currentSlide = index;
-                this.update();
-                this.resetAutoSlide();
-            }
-        },
-
-        startAutoSlide() {
-            this.autoSlideInterval = setInterval(() => this.moveSlide(1), 5000);
-        },
-
-        resetAutoSlide() {
-            clearInterval(this.autoSlideInterval);
-            this.startAutoSlide();
-        },
-
-        bindEvents() {
-            if (this.elements.leftArrow) {
-                this.elements.leftArrow.addEventListener('click', () => this.moveSlide(-1));
-            }
-            if (this.elements.rightArrow) {
-                this.elements.rightArrow.addEventListener('click', () => this.moveSlide(1));
-            }
-            this.elements.indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => this.goToSlide(index));
-            });
-        },
-    };
-
-    // Product Modal Functionality
-    const productModal = {
-        elements: {
-            modal: document.getElementById('productModal'),
-            content: document.querySelector('.modal-content'),
-            closeButton: document.querySelector('.close-modal'),
-            image: document.getElementById('modalProductImage'),
-            title: document.querySelector('.modal-product-title'),
-            price: document.querySelector('.modal-product-price'),
-            oldPrice: document.querySelector('.modal-product-old-price'),
-            rating: document.querySelector('.modal-product-rating'),
-            description: document.querySelector('.modal-product-description'),
-            specs: document.querySelector('.modal-product-specs ul'),
-        },
-
-        open(productId) {
-            if (!this.elements.modal || !this.elements.content || !this.elements.image) {
-                console.warn('Product modal elements not found.');
-                return;
-            }
-
-            // Set image with fallback
-            const imageUrl = `https://images.uzum.uz/product-${productId}.jpg` || 'https://via.placeholder.com/350x350';
-            this.elements.image.src = imageUrl;
-            this.elements.image.alt = `Mahsulot ${productId}`;
-            this.elements.image.onload = () => console.log(`Image loaded: ${imageUrl}`);
-            this.elements.image.onerror = () => {
-                this.elements.image.src = 'https://via.placeholder.com/350x350';
-                console.warn(`Failed to load image from ${imageUrl}, using placeholder.`);
+            // Populate modal with real data
+            const productElements = {
+                image: this.modal.querySelector('.modal-product-image'),
+                title: this.modal.querySelector('.modal-product-title'),
+                price: this.modal.querySelector('.modal-product-price'),
+                oldPrice: this.modal.querySelector('.modal-product-old-price'),
+                rating: this.modal.querySelector('.modal-product-rating'),
+                description: this.modal.querySelector('.modal-product-description'),
+                specs: this.modal.querySelector('.modal-product-specs ul'),
+                productId: this.modal.querySelector('#modalProductId')
             };
 
-            // Populate modal with data
-            this.elements.title.textContent = `Mahsulot ${productId}`;
-            this.elements.price.textContent = `1,000,000 so'm`;
-            this.elements.oldPrice.textContent = productId % 2 ? `1,200,000 so'm` : '';
-            this.elements.rating.innerHTML = '<i class="fas fa-star"></i>'.repeat(4) + '<i class="far fa-star"></i> (123)';
-            this.elements.description.textContent = 'Bu mahsulotning ta\'rifi, sifatli va foydali xususiyatlarga ega.';
-            this.elements.specs.innerHTML = '<li>Rang: Qora</li><li>Hajm: 128GB</li><li>Garantiya: 1 yil</li>';
+            productElements.image.src = product.imageUrl || 'https://via.placeholder.com/300';
+            productElements.title.textContent = product.name || 'Mahsulot';
+            productElements.price.textContent = `${product.price.toLocaleString()} so'm`;
+            productElements.oldPrice.textContent = product.oldPrice ? `${product.oldPrice.toLocaleString()} so'm` : '';
+            productElements.rating.innerHTML = '<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating || 0)) +
+                '<i class="far fa-star"></i>'.repeat(5 - Math.floor(product.rating || 0)) +
+                ` (${product.reviewCount || 0})`;
+            productElements.description.textContent = product.description || 'Bu mahsulotning ta\'rifi mavjud emas.';
+            productElements.specs.innerHTML = product.specs ? product.specs.map(spec => `<li>${spec}</li>`).join('') :
+                '<li>Rang: Qora</li><li>Hajm: 128GB</li><li>Garantiya: 1 yil</li>';
+            productElements.productId.value = product.id;
 
             // Show modal with animation
-            toggleBodyScroll(true);
-            this.elements.modal.classList.add('active');
-        },
+            this.modal.style.display = 'flex';
+            this.modal.style.opacity = '0';
+            this.modalContent.style.transform = 'translateY(-30px)';
+            this.modalContent.style.opacity = '0';
 
-        close() {
-            if (!this.elements.modal || !this.elements.content) return;
-
-            this.elements.modal.classList.remove('active');
-            setTimeout(() => {
-                toggleBodyScroll(false);
-            }, 300);
-        },
-
-        init() {
-            if (!this.elements.closeButton) return;
-            this.elements.closeButton.addEventListener('click', () => this.close());
-            this.elements.modal.addEventListener('click', (e) => {
-                if (e.target === this.elements.modal) this.close();
+            requestAnimationFrame(() => {
+                this.modal.style.transition = 'opacity 0.3s ease';
+                this.modal.style.opacity = '1';
+                this.modalContent.style.transition = 'all 0.4s ease-out';
+                this.modalContent.style.transform = 'translateY(0)';
+                this.modalContent.style.opacity = '1';
             });
-        },
-    };
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            this.showError('Mahsulot ma\'lumotlarini yuklashda xato yuz berdi.');
+        } finally {
+            this.hideLoadingSpinner();
+        }
+    },
 
-    // Region Modal Functionality
-    const regionModal = {
-        elements: {
-            modal: document.querySelector('.region-modal'),
-            content: document.querySelector('.region-modal-content'),
-            trigger: document.querySelector('#selectedRegion'),
-            closeButton: document.querySelector('.close-region-modal'),
-            items: document.querySelectorAll('.region-item'),
-        },
-        regions: [
-            'Toshkent', 'Andijon', 'Buxoro', 'Farg\'ona', 'Jizzax', 'Xorazm',
-            'Namangan', 'Navoiy', 'Qashqadaryo', 'Samarqand', 'Sirdaryo', 'Surxondaryo',
-        ],
+    close() {
+        if (!this.modal || !this.modalContent) return;
+        this.modalContent.style.transform = 'translateY(-30px)';
+        this.modalContent.style.opacity = '0';
+        this.modal.style.transition = 'opacity 0.3s ease';
+        this.modal.style.opacity = '0';
+        setTimeout(() => {
+            this.modal.style.display = 'none';
+        }, 300);
+    },
 
-        init() {
-            if (!this.elements.modal || !this.elements.trigger || !this.elements.closeButton || this.elements.items.length !== this.regions.length) {
-                console.warn('Region modal elements not found or incorrect number of regions.');
-                return;
-            }
+    showLoadingSpinner() {
+        if (this.loadingSpinner) this.loadingSpinner.style.display = 'block';
+    },
 
-            this.elements.trigger.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.open();
-            });
+    hideLoadingSpinner() {
+        if (this.loadingSpinner) this.loadingSpinner.style.display = 'none';
+    },
 
-            this.elements.closeButton.addEventListener('click', () => this.close());
-            this.elements.modal.addEventListener('click', (e) => {
-                if (e.target === this.elements.modal) this.close();
-            });
+    showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        this.modalContent.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+    }
+};
 
-            this.elements.items.forEach((item, index) => {
-                item.textContent = this.regions[index];
-                item.addEventListener('click', () => this.selectRegion(this.regions[index]));
-            });
-        },
+// Region Modal Functionality
+const regionModal = {
+    modal: document.querySelector('.region-modal'),
+    modalContent: document.querySelector('.region-modal-content'),
+    trigger: document.querySelector('#selectedRegion'),
+    closeButton: document.querySelector('.close-region-modal'),
+    items: document.querySelectorAll('.region-item'),
+    regions: [
+        'Toshkent', 'Andijon', 'Buxoro', 'Farg\'ona', 'Jizzax', 'Xorazm',
+        'Namangan', 'Navoiy', 'Qashqadaryo', 'Samarqand', 'Sirdaryo', 'Surxondaryo'
+    ],
 
-        open() {
-            toggleBodyScroll(true);
-            this.elements.modal.classList.add('active');
-        },
-
-        close() {
-            this.elements.modal.classList.remove('active');
-            setTimeout(() => {
-                toggleBodyScroll(false);
-            }, 300);
-        },
-
-        selectRegion(regionName) {
-            const selectedRegion = this.elements.trigger;
-            if (!selectedRegion) return;
-
-            selectedRegion.style.transition = 'all 0.4s ease-out';
-            selectedRegion.style.transform = 'scale(0.9)';
-            selectedRegion.style.opacity = '0.5';
-
-            setTimeout(() => {
-                selectedRegion.textContent = regionName;
-                selectedRegion.style.transform = 'scale(1.1)';
-                selectedRegion.style.opacity = '1';
-                setTimeout(() => {
-                    selectedRegion.style.transform = 'scale(1)';
-                }, 300);
-            }, 150);
-
-            this.close();
-        },
-    };
-
-    // Initialize Event Listeners for Product Cards
-    const initializeProductCards = () => {
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach((card) => {
-            card.addEventListener('click', (e) => {
-                if (e.target.classList.contains('buy-button')) return;
-                const productId = card.dataset.productId || Math.floor(Math.random() * 100);
-                productModal.open(productId);
+    init() {
+        if (!this.modal || !this.trigger || !this.closeButton || this.items.length !== 12) {
+            console.warn('Region modal elements not found or incorrect number of regions.');
+            return;
+        }
+        this.trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.open();
+        });
+        this.closeButton.addEventListener('click', () => this.close());
+        this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal) this.close();
+        });
+        this.items.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                this.selectRegion(this.regions[index]);
             });
         });
-    };
+    },
 
-    // Initialize All Components
+    open() {
+        this.modal.style.display = 'flex';
+        this.modal.style.opacity = '0';
+        this.modalContent.style.transform = 'scale(0.9)';
+        this.modalContent.style.opacity = '0';
+
+        requestAnimationFrame(() => {
+            this.modal.style.transition = 'opacity 0.3s ease';
+            this.modal.style.opacity = '1';
+            this.modalContent.style.transition = 'all 0.4s ease-out';
+            this.modalContent.style.transform = 'scale(1)';
+            this.modalContent.style.opacity = '1';
+        });
+    },
+
+    close() {
+        this.modalContent.style.transform = 'scale(0.9)';
+        this.modalContent.style.opacity = '0';
+        this.modal.style.transition = 'opacity 0.3s ease';
+        this.modal.style.opacity = '0';
+        setTimeout(() => {
+            this.modal.style.display = 'none';
+        }, 300);
+    },
+
+    selectRegion(regionName) {
+        const selectedRegion = document.querySelector('#selectedRegion');
+        if (!selectedRegion) return;
+        selectedRegion.style.transform = 'scale(0.9)';
+        selectedRegion.style.opacity = '0.5';
+        setTimeout(() => {
+            selectedRegion.textContent = regionName;
+            selectedRegion.style.transition = 'all 0.4s ease-out';
+            selectedRegion.style.transform = 'scale(1.1)';
+            selectedRegion.style.opacity = '1';
+            setTimeout(() => {
+                selectedRegion.style.transform = 'scale(1)';
+            }, 300);
+            // Update welcome message
+            const welcomeMessage = document.querySelector('.welcome-message');
+            if (welcomeMessage) {
+                welcomeMessage.textContent = `Xush kelibsiz, ${regionName}!`;
+            }
+        }, 150);
+        this.close();
+    }
+};
+
+// Search Functionality
+const searchBar = {
+    input: document.querySelector('.search-bar input'),
+    init() {
+        if (!this.input) return;
+        this.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = this.input.value.trim();
+                if (query) {
+                    fetch(`/api/products?search=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(products => updateProductGrid(products))
+                        .catch(error => {
+                            console.error('Error searching products:', error);
+                            productModal.showError('Qidiruvda xato yuz berdi.');
+                        });
+                }
+            }
+        });
+    }
+};
+
+// Update Product Grid
+function updateProductGrid(products) {
+    const productsGrid = document.querySelector('.products-grid');
+    if (!productsGrid) return;
+
+    productsGrid.innerHTML = products.map(product => `
+        <div class="product-card" data-product-id="${product.id}">
+            <div class="product-image-container">
+                <img class="product-image" src="${product.imageUrl || 'https://via.placeholder.com/300'}" alt="${product.name}">
+                ${product.oldPrice ? `<span class="discount-badge">${Math.round((product.oldPrice - product.price) / product.oldPrice * 100)}% chegirma</span>` : ''}
+                ${product.hasCredit ? '<span class="kredit-badge">Kreditda</span>' : ''}
+                ${product.isSuperPrice ? '<span class="super-price-badge">Super narx</span>' : ''}
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <div class="product-rating">
+                    ${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating || 0))}
+                    ${'<i class="far fa-star"></i>'.repeat(5 - Math.floor(product.rating || 0))}
+                    <span>(${product.reviewCount || 0})</span>
+                </div>
+                <div class="product-price">${product.price.toLocaleString()} so'm</div>
+                ${product.oldPrice ? `<div class="product-old-price">${product.oldPrice.toLocaleString()} so'm</div>` : ''}
+                ${product.hasCredit ? `<div class="product-credit">${product.creditPricePerMonth.toLocaleString()} so'm/oy</div>` : ''}
+                <form action="/cart/add" method="post">
+                    <input type="hidden" name="productId" value="${product.id}">
+                    <button type="submit" class="buy-button">Sotib olish</button>
+                </form>
+            </div>
+        </div>
+    `).join('');
+
+    initializeProductCards();
+}
+
+// Global Click Handler for Modals
+window.addEventListener('click', (event) => {
+    if (event.target === productModal.modal) {
+        productModal.close();
+    }
+    if (event.target === regionModal.modal) {
+        regionModal.close();
+    }
+});
+
+// Product Card Click Handler
+const initializeProductCards = () => {
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('buy-button') || e.target.closest('form')) return;
+            const productId = card.dataset.productId || 'default';
+            productModal.open(productId);
+        });
+    });
+};
+
+// Initialize Everything
+document.addEventListener('DOMContentLoaded', () => {
     carousel.init();
     regionModal.init();
-    productModal.init();
+    searchBar.init();
     initializeProductCards();
 });
