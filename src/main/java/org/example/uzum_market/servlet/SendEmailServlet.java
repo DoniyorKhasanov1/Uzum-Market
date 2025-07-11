@@ -26,6 +26,7 @@ public class SendEmailServlet extends HttpServlet {
     }
 }
 
+
 @Getter
 class LoginData {
     @Setter
