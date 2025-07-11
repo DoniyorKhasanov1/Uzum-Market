@@ -34,18 +34,27 @@ public class MainPageServlet extends HttpServlet {
                 page = 0;
             }
 
+            // Category parametri
+            String category = request.getParameter("category");
+
             // Mahsulotlarni olish
             em.getTransaction().begin();
             List<Product> recommendedProducts = productRepository.findRecommendedProducts();
             List<Product> discountedProducts = productRepository.findDiscountedProducts();
-            List<Product> products = productRepository.findAll(page, size);
+            List<Product> products;
+            if (category != null && !category.isEmpty() && !category.equals("all")) {
+                products = productRepository.findByCategory(category);
+            } else {
+                products = productRepository.findAll(page, size);
+            }
             em.getTransaction().commit();
 
             // Mahsulotlarni JSP ga uzatish
             request.setAttribute("recommendedProducts", recommendedProducts);
             request.setAttribute("discountedProducts", discountedProducts);
-            request.setAttribute("products", products);
+            request.setAttribute("categoryProducts", products); // Changed to categoryProducts for consistency
             request.setAttribute("currentPage", page);
+            request.setAttribute("selectedCategory", category != null ? category : "all");
 
             // main.jsp ga yo‘naltirish
             request.getRequestDispatcher("/main.jsp").forward(request, response);

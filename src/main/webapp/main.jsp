@@ -41,7 +41,7 @@
             <div class="header-links">
                 <a href="#" class="header-link"><i class="fas fa-store"></i> Sotuvchi bo'lish</a>
                 <a href="#" class="header-link"><i class="fas fa-question-circle"></i> Savol-javob</a>
-                <a href="#" class="header-link"><i class="fas fa-clipboard-list"></i> Buyurtmalarim</a>
+                <a href="cart.jsp" class="header-link"><i class="fas fa-clipboard-list"></i> Buyurtmalarim</a>
                 <a href="#" class="header-link"><i class="fas fa-globe"></i> O'zbekcha</a>
             </div>
         </div>
@@ -67,21 +67,21 @@
                     <i class="fas fa-heart icon"></i>
                     <span>Saralangan</span>
                 </a>
-                <a href="#" class="user-action-item">
+                <a href="cart.jsp" class="user-action-item">
                     <i class="fas fa-shopping-cart icon"></i>
                     <span>Savat</span>
                 </a>
             </div>
         </div>
         <div class="header-categories">
-            <a href="#" class="category">Hafta tovarlari</a>
-            <a href="#" class="category">Elektronika</a>
-            <a href="#" class="category">Maishiy texnika</a>
-            <a href="#" class="category">Kiyim</a>
-            <a href="#" class="category">Poyabzallar</a>
-            <a href="#" class="category">Aksessuarlar</a>
-            <a href="#" class="category">Go'zallik va parvarish</a>
-            <a href="#" class="category">Salomatlik</a>
+            <a href="${pageContext.request.contextPath}/products?category=Hafta tovarlari" class="category">Hafta tovarlari</a>
+            <a href="${pageContext.request.contextPath}/products?category=Elektronika" class="category">Elektronika</a>
+            <a href="${pageContext.request.contextPath}/products?category=Maishiy texnika" class="category">Maishiy texnika</a>
+            <a href="${pageContext.request.contextPath}/products?category=Kiyim" class="category">Kiyim</a>
+            <a href="${pageContext.request.contextPath}/products?category=Poyabzallar" class="category">Poyabzallar</a>
+            <a href="${pageContext.request.contextPath}/products?category=Aksessuarlar" class="category">Aksessuarlar</a>
+            <a href="${pageContext.request.contextPath}/products?category=Go'zallik va parvarish" class="category">Go'zallik va parvarish</a>
+            <a href="${pageContext.request.contextPath}/products?category=Salomatlik" class="category">Salomatlik</a>
         </div>
     </div>
 </header>
@@ -160,144 +160,46 @@
             </div>
         </div>
         <div class="section-title">
-            <h2>Tavsiya etilgan mahsulotlar</h2>
-            <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
+            <h2>
+                <c:choose>
+                    <c:when test="${selectedCategory != null && selectedCategory != 'all' && !empty selectedCategory}">
+                        ${selectedCategory}
+                    </c:when>
+                    <c:otherwise>
+                        Barcha mahsulotlar
+                    </c:otherwise>
+                </c:choose>
+            </h2>
+            <a href="${pageContext.request.contextPath}/products?category=all">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
         </div>
         <c:choose>
-            <c:when test="${not empty recommendedProducts}">
+            <c:when test="${not empty categoryProducts}">
                 <div class="products-grid">
-                    <c:forEach items="${recommendedProducts}" var="product" end="7">
-                        <div class="product-card" data-product-id="${product.id}">
-                            <div class="product-image-container">
-                                <img src="${product.imageUrl}" alt="${product.name}" class="product-image"
-                                     loading="lazy">
-                                <c:if test="${product.oldPrice > 0 && product.price < product.oldPrice}">
-                                    <div class="discount-badge">
-                                        <fmt:formatNumber value="${100 - (product.price * 100 / product.oldPrice)}"
-                                                          maxFractionDigits="0"/>% chegirma
-                                    </div>
-                                </c:if>
-                                <c:if test="${product.hasCredit}">
-                                    <div class="kredit-badge">Kredit</div>
-                                </c:if>
-                                <c:if test="${product.isSuperPrice}">
-                                    <div class="super-price-badge">Super narx</div>
-                                </c:if>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-name">${product.name}</div>
-                                <div class="product-rating">
-                                    <c:forEach begin="1" end="5" var="i">
-                                        <c:choose>
-                                            <c:when test="${i <= product.rating}">
-                                                <i class="fas fa-star"></i>
-                                            </c:when>
-                                            <c:when test="${i - 0.5 <= product.rating && product.rating < i}">
-                                                <i class="fas fa-star-half-alt"></i>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="far fa-star"></i>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                    <span>(${product.reviewCount})</span>
-                                </div>
-                                <div class="product-price">
-                                    <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>
-                                    so'm
-                                </div>
-                                <c:if test="${product.oldPrice > 0}">
-                                    <div class="product-old-price">
-                                        <fmt:formatNumber value="${product.oldPrice}" type="number"
-                                                          maxFractionDigits="0"/> so'm
-                                    </div>
-                                </c:if>
-                                <c:if test="${product.hasCredit}">
-                                    <div class="product-credit">
-                                        <fmt:formatNumber value="${product.creditPricePerMonth}" type="number"
-                                                          maxFractionDigits="0"/> so'mdan/oyiga
-                                    </div>
-                                </c:if>
-                                <button class="buy-button">Savatga</button>
-                            </div>
+                    <c:forEach var="product" items="${categoryProducts}" varStatus="status">
+                        <c:if test="${status.index % 4 == 0}">
+                            <div class="product-row">
+                        </c:if>
+                        <div class="product-card">
+                            <img src="${product.imageUrl}" alt="${product.name}" />
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-price">${product.price} so'm</div>
+                            <c:if test="${product.oldPrice > 0}">
+                                <div class="product-old-price">${product.oldPrice} so'm</div>
+                            </c:if>
+                            <form action="${pageContext.request.contextPath}/cart/add" method="post">
+                                <input type="hidden" name="productId" value="${product.id}">
+                                <button type="submit" class="buy-button">Savatga qo'shish</button>
+                            </form>
                         </div>
+                        <c:if test="${status.index % 4 == 3 || status.last}">
+                            </div>
+                        </c:if>
                     </c:forEach>
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="no-products-message">
-                    <p>Tavsiya etilgan mahsulotlar topilmadi</p>
-                </div>
-            </c:otherwise>
-        </c:choose>
-        <div class="section-title">
-            <h2>Chegirmali mahsulotlar</h2>
-            <a href="#">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <c:choose>
-            <c:when test="${not empty discountedProducts}">
-                <div class="products-grid">
-                    <c:forEach items="${discountedProducts}" var="product" end="7">
-                        <div class="product-card" data-product-id="${product.id}">
-                            <div class="product-image-container">
-                                <img src="${product.imageUrl}" alt="${product.name}" class="product-image"
-                                     loading="lazy">
-                                <c:if test="${product.oldPrice > 0 && product.price < product.oldPrice}">
-                                    <div class="discount-badge">
-                                        <fmt:formatNumber value="${100 - (product.price * 100 / product.oldPrice)}"
-                                                          maxFractionDigits="0"/>% chegirma
-                                    </div>
-                                </c:if>
-                                <c:if test="${product.hasCredit}">
-                                    <div class="kredit-badge">Kredit</div>
-                                </c:if>
-                                <c:if test="${product.isSuperPrice}">
-                                    <div class="super-price-badge">Super narx</div>
-                                </c:if>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-name">${product.name}</div>
-                                <div class="product-rating">
-                                    <c:forEach begin="1" end="5" var="i">
-                                        <c:choose>
-                                            <c:when test="${i <= product.rating}">
-                                                <i class="fas fa-star"></i>
-                                            </c:when>
-                                            <c:when test="${i - 0.5 <= product.rating && product.rating < i}">
-                                                <i class="fas fa-star-half-alt"></i>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <i class="far fa-star"></i>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                                    <span>(${product.reviewCount})</span>
-                                </div>
-                                <div class="product-price">
-                                    <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>
-                                    so'm
-                                </div>
-                                <c:if test="${product.oldPrice > 0}">
-                                    <div class="product-old-price">
-                                        <fmt:formatNumber value="${product.oldPrice}" type="number"
-                                                          maxFractionDigits="0"/> so'm
-                                    </div>
-                                </c:if>
-                                <c:if test="${product.hasCredit}">
-                                    <div class="product-credit">
-                                        <fmt:formatNumber value="${product.creditPricePerMonth}" type="number"
-                                                          maxFractionDigits="0"/> so'mdan/oyiga
-                                    </div>
-                                </c:if>
-                                <button class="buy-button">Savatga</button>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="no-products-message">
-                    <p>Chegirmali mahsulotlar topilmadi</p>
+                    <p>Mahsulotlar topilmadi yoki kategoriya tanlanmagan.</p>
                 </div>
             </c:otherwise>
         </c:choose>
@@ -314,7 +216,10 @@
                     <h4>Texnik xususiyatlar</h4>
                     <ul id="modalProductSpecs"></ul>
                 </div>
-                <button class="buy-button" style="margin-top: 20px;">Savatga qo'shish</button>
+                <form action="${pageContext.request.contextPath}/cart/add" method="post">
+                    <input type="hidden" name="productId" id="modalProductId">
+                    <button type="submit" class="buy-button" style="margin-top: 20px;">Savatga qo'shish</button>
+                </form>
             </div>
         </div>
     </div>
