@@ -73,16 +73,13 @@ const productModal = {
             return;
         }
 
-        // Show loading spinner
         this.showLoadingSpinner();
 
         try {
-            // Fetch product data from the server
             const response = await fetch(`/api/product?id=${encodeURIComponent(productId)}`);
             if (!response.ok) throw new Error('Failed to fetch product data');
             const product = await response.json();
 
-            // Populate modal with real data
             const productElements = {
                 image: this.modal.querySelector('.modal-product-image'),
                 title: this.modal.querySelector('.modal-product-title'),
@@ -101,12 +98,10 @@ const productModal = {
             productElements.rating.innerHTML = '<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating || 0)) +
                 '<i class="far fa-star"></i>'.repeat(5 - Math.floor(product.rating || 0)) +
                 ` (${product.reviewCount || 0})`;
-            productElements.description.textContent = product.description || 'Bu mahsulotning ta\'rifi mavjud emas.';
-            productElements.specs.innerHTML = product.specs ? product.specs.map(spec => `<li>${spec}</li>`).join('') :
-                '<li>Rang: Qora</li><li>Hajm: 128GB</li><li>Garantiya: 1 yil</li>';
+            productElements.description.textContent = 'Ta\'rif mavjud emas.';
+            productElements.specs.innerHTML = '<li>Xususiyatlar mavjud emas</li>';
             productElements.productId.value = product.id;
 
-            // Show modal with animation
             this.modal.style.display = 'flex';
             this.modal.style.opacity = '0';
             this.modalContent.style.transform = 'translateY(-30px)';
@@ -212,25 +207,11 @@ const regionModal = {
         }, 300);
     },
 
-    selectRegion(regionName) {
-        const selectedRegion = document.querySelector('#selectedRegion');
-        if (!selectedRegion) return;
-        selectedRegion.style.transform = 'scale(0.9)';
-        selectedRegion.style.opacity = '0.5';
-        setTimeout(() => {
-            selectedRegion.textContent = regionName;
-            selectedRegion.style.transition = 'all 0.4s ease-out';
-            selectedRegion.style.transform = 'scale(1.1)';
-            selectedRegion.style.opacity = '1';
-            setTimeout(() => {
-                selectedRegion.style.transform = 'scale(1)';
-            }, 300);
-            // Update welcome message
-            const welcomeMessage = document.querySelector('.welcome-message');
-            if (welcomeMessage) {
-                welcomeMessage.textContent = `Xush kelibsiz, ${regionName}!`;
-            }
-        }, 150);
+    selectRegion(region) {
+        const selectedRegionElement = document.getElementById('selectedRegion');
+        if (selectedRegionElement) {
+            selectedRegionElement.textContent = region;
+        }
         this.close();
     }
 };
@@ -238,85 +219,44 @@ const regionModal = {
 // Search Functionality
 const searchBar = {
     input: document.querySelector('.search-bar input'),
+    searchIcon: document.querySelector('.search-bar .search-icon'),
+
     init() {
-        if (!this.input) return;
+        if (!this.input || !this.searchIcon) {
+            console.warn('Search bar elements not found.');
+            return;
+        }
+        this.searchIcon.addEventListener('click', () => this.performSearch());
         this.input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const query = this.input.value.trim();
-                if (query) {
-                    fetch(`/api/products?search=${encodeURIComponent(query)}`)
-                        .then(response => response.json())
-                        .then(products => updateProductGrid(products))
-                        .catch(error => {
-                            console.error('Error searching products:', error);
-                            productModal.showError('Qidiruvda xato yuz berdi.');
-                        });
-                }
-            }
+            if (e.key === 'Enter') this.performSearch();
         });
+    },
+
+    performSearch() {
+        const query = this.input.value.trim();
+        if (query) {
+            window.location.href = `${window.location.pathname}?search=${encodeURIComponent(query)}`;
+        }
     }
 };
 
-// Update Product Grid
-function updateProductGrid(products) {
-    const productsGrid = document.querySelector('.products-grid');
-    if (!productsGrid) return;
-
-    productsGrid.innerHTML = products.map(product => `
-        <div class="product-card" data-product-id="${product.id}">
-            <div class="product-image-container">
-                <img class="product-image" src="${product.imageUrl || 'https://via.placeholder.com/300'}" alt="${product.name}">
-                ${product.oldPrice ? `<span class="discount-badge">${Math.round((product.oldPrice - product.price) / product.oldPrice * 100)}% chegirma</span>` : ''}
-                ${product.hasCredit ? '<span class="kredit-badge">Kreditda</span>' : ''}
-                ${product.isSuperPrice ? '<span class="super-price-badge">Super narx</span>' : ''}
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <div class="product-rating">
-                    ${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating || 0))}
-                    ${'<i class="far fa-star"></i>'.repeat(5 - Math.floor(product.rating || 0))}
-                    <span>(${product.reviewCount || 0})</span>
-                </div>
-                <div class="product-price">${product.price.toLocaleString()} so'm</div>
-                ${product.oldPrice ? `<div class="product-old-price">${product.oldPrice.toLocaleString()} so'm</div>` : ''}
-                ${product.hasCredit ? `<div class="product-credit">${product.creditPricePerMonth.toLocaleString()} so'm/oy</div>` : ''}
-                <form action="/cart/add" method="post">
-                    <input type="hidden" name="productId" value="${product.id}">
-                    <button type="submit" class="buy-button">Sotib olish</button>
-                </form>
-            </div>
-        </div>
-    `).join('');
-
-    initializeProductCards();
-}
-
-// Global Click Handler for Modals
-window.addEventListener('click', (event) => {
-    if (event.target === productModal.modal) {
-        productModal.close();
-    }
-    if (event.target === regionModal.modal) {
-        regionModal.close();
-    }
-});
-
-// Product Card Click Handler
-const initializeProductCards = () => {
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('buy-button') || e.target.closest('form')) return;
-            const productId = card.dataset.productId || 'default';
-            productModal.open(productId);
-        });
-    });
-};
-
-// Initialize Everything
+// Initialization
 document.addEventListener('DOMContentLoaded', () => {
     carousel.init();
+    productModal.close(); // Ensure modal is closed on load
     regionModal.init();
     searchBar.init();
-    initializeProductCards();
+
+    // Product card click event
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const productId = card.getAttribute('data-product-id');
+            if (productId) productModal.open(productId);
+        });
+    });
+
+    // Close modal on click outside or close button
+    document.querySelectorAll('.close-modal').forEach(closeButton => {
+        closeButton.addEventListener('click', () => productModal.close());
+    });
 });

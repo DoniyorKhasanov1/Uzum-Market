@@ -74,43 +74,35 @@
             </div>
         </div>
         <div class="header-categories">
-            <a href="${pageContext.request.contextPath}/products?category=Hafta tovarlari" class="category">Hafta tovarlari</a>
-            <a href="${pageContext.request.contextPath}/products?category=Elektronika" class="category">Elektronika</a>
-            <a href="${pageContext.request.contextPath}/products?category=Maishiy texnika" class="category">Maishiy texnika</a>
-            <a href="${pageContext.request.contextPath}/products?category=Kiyim" class="category">Kiyim</a>
-            <a href="${pageContext.request.contextPath}/products?category=Poyabzallar" class="category">Poyabzallar</a>
-            <a href="${pageContext.request.contextPath}/products?category=Aksessuarlar" class="category">Aksessuarlar</a>
-            <a href="${pageContext.request.contextPath}/products?category=Go'zallik va parvarish" class="category">Go'zallik va parvarish</a>
-            <a href="${pageContext.request.contextPath}/products?category=Salomatlik" class="category">Salomatlik</a>
+            <c:forEach var="category" items="${uniqueCategories}">
+                <a href="${pageContext.request.contextPath}/products?category=${category}" class="category">${category}</a>
+            </c:forEach>
         </div>
     </div>
 </header>
+
 <div class="welcome-message" id="welcomeMessage">
-    <span>Welcome User to G52 Project</span>
+    <span>Xush kelibsiz, Uzum Marketga!</span>
 </div>
+
 <main class="main-content">
     <div class="container">
         <div class="carousel-container">
             <div class="carousel-inner" id="carouselInner">
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1"
-                         loading="lazy">
+                    <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2"
-                         loading="lazy">
+                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 3"
-                         loading="lazy">
+                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 3">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Promo Banner 4"
-                         loading="lazy">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Promo Banner 4">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/clga9ofn7c6qm23k8mkg/main_page_banner.jpg" alt="Promo Banner 5"
-                         loading="lazy">
+                    <img src="https://images.uzum.uz/clga9ofn7c6qm23k8mkg/main_page_banner.jpg" alt="Promo Banner 5">
                 </div>
             </div>
             <button class="carousel-arrow left"><i class="fas fa-chevron-left"></i></button>
@@ -123,6 +115,7 @@
                 <div class="carousel-indicator"></div>
             </div>
         </div>
+
         <div class="feature-blocks">
             <div class="feature-block">
                 <div class="icon"><i class="fas fa-baby-carriage"></i></div>
@@ -141,7 +134,8 @@
                 <span>Hafta tovarlari</span>
             </div>
         </div>
-        <div class="uzum-card-banner fade-in">
+
+        <div class="uzum-card-banner">
             <div class="uzum-card-content">
                 <div class="uzum-card-text">
                     <h1>Uzum Karta bilan <strong>30% gacha chegirma</strong></h1>
@@ -154,55 +148,88 @@
                     </ul>
                 </div>
                 <div class="uzum-card-image">
-                    <img src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg"
-                         alt="Uzum Card" loading="lazy">
+                    <img src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg" alt="Uzum Card">
                 </div>
             </div>
         </div>
-        <div class="section-title">
-            <h2>
-                <c:choose>
-                    <c:when test="${selectedCategory != null && selectedCategory != 'all' && !empty selectedCategory}">
-                        ${selectedCategory}
-                    </c:when>
-                    <c:otherwise>
-                        Barcha mahsulotlar
-                    </c:otherwise>
-                </c:choose>
-            </h2>
-            <a href="${pageContext.request.contextPath}/products?category=all">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <c:choose>
-            <c:when test="${not empty categoryProducts}">
+
+        <!-- Kategoriyalar bo'yicha mahsulotlar -->
+        <c:if test="${not empty uniqueCategories}">
+            <c:forEach var="category" items="${uniqueCategories}">
+                <div class="section-title">
+                    <h2>${category}</h2>
+                    <a href="${pageContext.request.contextPath}/products?category=${category}">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
+                </div>
                 <div class="products-grid">
-                    <c:forEach var="product" items="${categoryProducts}" varStatus="status">
-                        <c:if test="${status.index % 4 == 0}">
-                            <div class="product-row">
-                        </c:if>
-                        <div class="product-card">
-                            <img src="${product.imageUrl}" alt="${product.name}" />
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-price">${product.price} so'm</div>
-                            <c:if test="${product.oldPrice > 0}">
-                                <div class="product-old-price">${product.oldPrice} so'm</div>
-                            </c:if>
-                            <form action="${pageContext.request.contextPath}/cart/add" method="post">
-                                <input type="hidden" name="productId" value="${product.id}">
-                                <button type="submit" class="buy-button">Savatga qo'shish</button>
-                            </form>
-                        </div>
-                        <c:if test="${status.index % 4 == 3 || status.last}">
+                    <c:set var="categoryProducts" value="${categoryProductsMap[category]}" />
+                    <c:choose>
+                        <c:when test="${not empty categoryProducts}">
+                            <c:forEach var="product" items="${categoryProducts}">
+                                <div class="product-card" data-product-id="${product.id}">
+                                    <div class="product-badges">
+                                        <c:if test="${product.oldPrice > 0}">
+                                            <div class="product-badge discount">
+                                                <fmt:formatNumber value="${(product.oldPrice - product.price) / product.oldPrice * 100}"
+                                                                  maxFractionDigits="0" />%
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${product.hasCredit}">
+                                            <div class="product-badge credit">
+                                                <i class="fas fa-credit-card"></i> Kredit
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${product.isSuperPrice}">
+                                            <div class="product-badge super-price">
+                                                <i class="fas fa-bolt"></i> Super narx
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                    <div class="product-image-container">
+                                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" />
+                                    </div>
+                                    <div class="product-content">
+                                        <div class="product-name">${product.name}</div>
+                                        <div class="product-price-row">
+                                            <div class="current-price">
+                                                <fmt:formatNumber value="${product.price}" type="number" /> so'm
+                                            </div>
+                                            <c:if test="${product.oldPrice > 0}">
+                                                <div class="old-price">
+                                                    <fmt:formatNumber value="${product.oldPrice}" type="number" /> so'm
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                        <c:if test="${product.hasCredit}">
+                                            <div class="credit-price">
+                                                <fmt:formatNumber value="${product.creditPricePerMonth}" type="number" /> so'm/oy
+                                            </div>
+                                        </c:if>
+                                        <div class="product-rating">
+                                            <div class="stars">
+                                                <c:forEach begin="1" end="5" var="i">
+                                                    <i class="fas fa-star ${i <= product.rating ? 'active' : ''}"></i>
+                                                </c:forEach>
+                                            </div>
+                                            <span class="review-count">(${product.reviewCount})</span>
+                                        </div>
+                                        <form action="${pageContext.request.contextPath}/cart/add" method="post">
+                                            <input type="hidden" name="productId" value="${product.id}">
+                                            <button type="submit" class="buy-button">Savatga</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-products-message">
+                                <p>Bu kategoriyada mahsulotlar topilmadi.</p>
                             </div>
-                        </c:if>
-                    </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
-            </c:when>
-            <c:otherwise>
-                <div class="no-products-message">
-                    <p>Mahsulotlar topilmadi yoki kategoriya tanlanmagan.</p>
-                </div>
-            </c:otherwise>
-        </c:choose>
+            </c:forEach>
+        </c:if>
+
         <div class="product-modal" id="productModal">
             <div class="modal-content">
                 <span class="close-modal">×</span>
@@ -218,12 +245,13 @@
                 </div>
                 <form action="${pageContext.request.contextPath}/cart/add" method="post">
                     <input type="hidden" name="productId" id="modalProductId">
-                    <button type="submit" class="buy-button" style="margin-top: 20px;">Savatga qo'shish</button>
+                    <button type="submit" class="buy-button">Savatga qo'shish</button>
                 </form>
             </div>
         </div>
     </div>
 </main>
+
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>

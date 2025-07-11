@@ -31,6 +31,17 @@ public class ProductRepository {
         }
     }
 
+    public List<Product> findAllWithoutPagination() {
+        try {
+            TypedQuery<Product> query = entityManager.createQuery(
+                    "SELECT p FROM Product p ORDER BY p.id DESC", Product.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Xatolik findAllWithoutPagination metodida: {}", e.getMessage(), e);
+            return Collections.emptyList();
+        }
+    }
+
     public Product findById(Long id) {
         try {
             TypedQuery<Product> query = entityManager.createQuery(
@@ -79,6 +90,17 @@ public class ProductRepository {
             return query.getResultList();
         } catch (Exception e) {
             logger.error("Xatolik findByCategory metodida (category: {}): {}", category, e.getMessage(), e);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<String> findDistinctCategories() {
+        try {
+            TypedQuery<String> query = entityManager.createQuery(
+                    "SELECT DISTINCT p.category FROM Product p WHERE p.category IS NOT NULL", String.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Xatolik findDistinctCategories metodida: {}", e.getMessage(), e);
             return Collections.emptyList();
         }
     }
