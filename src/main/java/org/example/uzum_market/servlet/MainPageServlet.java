@@ -19,10 +19,8 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         //Used try with resources to close EntityManager automatically
-      //EntityManagerni try-with-resources qilish kerak edi
-        try (EntityManager em = JPAUtil.getEntityManager()) 
+        try (EntityManager em = JPAUtil.getEntityManager()) {
             ProductRepository productRepository = new ProductRepository(em);
 
             em.getTransaction().begin();
@@ -43,12 +41,10 @@ public class MainPageServlet extends HttpServlet {
 
             request.getRequestDispatcher("/main.jsp").forward(request, response);
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
             e.printStackTrace();
             request.setAttribute("errorMessage", "Mahsulotlarni yuklashda xato: " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
+
     }
 }
