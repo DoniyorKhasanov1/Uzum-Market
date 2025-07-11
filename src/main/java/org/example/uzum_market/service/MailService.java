@@ -1,4 +1,4 @@
-package org.example.uzum_market.server;
+package org.example.uzum_market.service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;

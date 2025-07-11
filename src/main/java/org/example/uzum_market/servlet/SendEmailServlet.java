@@ -4,13 +4,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.uzum_market.server.MailService;
+import org.example.uzum_market.service.MailService;
 
 import java.io.IOException;
-import java.util.Random;
 
 @WebServlet("/sendEmailServlet")
 public class SendEmailServlet extends HttpServlet {

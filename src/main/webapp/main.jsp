@@ -59,17 +59,53 @@
                 <i class="fas fa-search search-icon"></i>
             </div>
             <div class="user-actions">
-                <a href="#" class="user-action-item">
+                <a href="#" class="user-action-item" onclick="openModal()">
                     <i class="fas fa-user icon"></i>
                     <span>Kirish</span>
-
-
                 </a>
+
+
+                <!-- Kirish Modal (1-step) -->
+<%--                <div id="loginModal" class="modal">--%>
+<%--                    <div class="modal-content-login">--%>
+<%--                        <span class="close" onclick="closeModal()">&times;</span>--%>
+<%--                        <div class="model-header">--%>
+<%--                            <img src="uzum_logo.png" class="logo-img" alt="UzumLogo">--%>
+<%--                        </div>--%>
+<%--                        <h2>Uzum Market'ga kirish</h2>--%>
+<%--                        <form id="loginForm">--%>
+<%--                            <input type="text" id="name" name="name" placeholder="Ismingiz" required>--%>
+<%--                            <input type="email" id="email" name="email" placeholder="Emailingiz" required>--%>
+<%--                            <button type="submit">Kodni olish</button>--%>
+<%--                        </form>--%>
+<%--                        <p class="terms">--%>
+<%--                            Davom etgan holda men <a href="#">shaxsiy ma'lumotlarni qayta ishlash siyosatiga</a> rozilik--%>
+<%--                            bildiraman va <a href="#">Uzum ID ommaviy oferta</a> bilan roziman--%>
+<%--                        </p>--%>
+
+<%--                        <a href="#" class="help-link">Uzum ID nima?</a>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+
+                <!-- Kod Tasdiqlash Modal (2-step) -->
+<%--                <div id="verifyModal" class="modal">--%>
+<%--                    <div class="modal-content">--%>
+<%--                        <span class="close" onclick="closeModal()">&times;</span>--%>
+<%--                        <h2>Kod kiriting</h2>--%>
+<%--                        <form id="verifyForm">--%>
+<%--                            <input type="text" id="verificationCode" name="code" placeholder="Kodni kiriting" required>--%>
+<%--                            <button type="submit">Tasdiqlash</button>--%>
+<%--                        </form>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+
+                <%--Saralanganlar tugmasi uchun--%>
+
                 <a href="#" class="user-action-item">
                     <i class="fas fa-heart icon"></i>
                     <span>Saralangan</span>
                 </a>
-                <a href="cart.jsp" class="user-action-item">
+                <a href="#" class="user-action-item">
                     <i class="fas fa-shopping-cart icon"></i>
                     <span>Savat</span>
                 </a>

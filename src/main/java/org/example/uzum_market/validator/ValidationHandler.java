@@ -6,7 +6,7 @@ import org.example.uzum_market.annotations.EmailValidation;
 /**
  * Email validation handler for {@link EmailValidation} annotation.
  * {@link ValidationHandler#isValid(String, jakarta.validation.ConstraintValidatorContext)}
- * is used to validate email that user enters in registration form.
+ * is used to validate email that a user enters in the registration form.
  *
  * @version 1.0
  * @since 2025-07-09
