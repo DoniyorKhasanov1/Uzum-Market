@@ -36,6 +36,7 @@ public class InitDataServlet extends HttpServlet {
                     .hasCredit(true)
                     .isSuperPrice(true)
                     .isRecommended(true)
+                    .category("Elektronika")
                     .build();
 
             Product product2 = Product.builder()
@@ -49,6 +50,7 @@ public class InitDataServlet extends HttpServlet {
                     .hasCredit(true)
                     .isSuperPrice(false)
                     .isRecommended(true)
+                    .category("Elektronika")
                     .build();
 
             Product product3 = Product.builder()
@@ -62,6 +64,7 @@ public class InitDataServlet extends HttpServlet {
                     .hasCredit(true)
                     .isSuperPrice(true)
                     .isRecommended(false)
+                    .category("Maishiy texnika")
                     .build();
 
             // Mahsulotlarni saqlash

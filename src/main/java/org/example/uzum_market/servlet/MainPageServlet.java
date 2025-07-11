@@ -11,7 +11,7 @@ import org.example.uzum_market.entity.Product;
 import org.example.uzum_market.repository.ProductRepository;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
 @WebServlet(name = "mainPageServlet", value = "/main")
 public class MainPageServlet extends HttpServlet {
@@ -22,22 +22,41 @@ public class MainPageServlet extends HttpServlet {
         try {
             ProductRepository productRepository = new ProductRepository(em);
 
-            em.getTransaction().begin();
-            List<Product> allProducts = productRepository.findAll(0, Integer.MAX_VALUE);
-            List<Product> recommendedProducts = productRepository.findRecommendedProducts();
-            List<Product> discountedProducts = productRepository.findDiscountedProducts();
-            em.getTransaction().commit();
-
-            Map<String, List<Product>> productsByCategory = new LinkedHashMap<>();
-            for (Product product : allProducts) {
-                String category = product.getCategory() != null ? product.getCategory() : "Other";
-                productsByCategory.computeIfAbsent(category, k -> new ArrayList<>()).add(product);
+            // Pagination parametrlari
+            int page = 0;
+            int size = 10;
+            try {
+                String pageParam = request.getParameter("page");
+                if (pageParam != null) {
+                    page = Integer.parseInt(pageParam);
+                }
+            } catch (NumberFormatException e) {
+                page = 0;
             }
 
+            // Category parametri
+            String category = request.getParameter("category");
+
+            // Mahsulotlarni olish
+            em.getTransaction().begin();
+            List<Product> recommendedProducts = productRepository.findRecommendedProducts();
+            List<Product> discountedProducts = productRepository.findDiscountedProducts();
+            List<Product> products;
+            if (category != null && !category.isEmpty() && !category.equals("all")) {
+                products = productRepository.findByCategory(category);
+            } else {
+                products = productRepository.findAll(page, size);
+            }
+            em.getTransaction().commit();
+
+            // Mahsulotlarni JSP ga uzatish
             request.setAttribute("recommendedProducts", recommendedProducts);
             request.setAttribute("discountedProducts", discountedProducts);
-            request.setAttribute("productsByCategory", productsByCategory);
+            request.setAttribute("categoryProducts", products); // Changed to categoryProducts for consistency
+            request.setAttribute("currentPage", page);
+            request.setAttribute("selectedCategory", category != null ? category : "all");
 
+            // main.jsp ga yo‘naltirish
             request.getRequestDispatcher("/main.jsp").forward(request, response);
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
