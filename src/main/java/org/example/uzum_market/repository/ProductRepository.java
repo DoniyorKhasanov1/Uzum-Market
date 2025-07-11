@@ -70,28 +70,28 @@ public class ProductRepository {
         }
     }
 
-    public List<Product> searchProducts(String query) {
+    public List<Product> findByCategory(String category) {
         try {
-            TypedQuery<Product> typedQuery = entityManager.createQuery(
-                    "SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:query) ORDER BY p.id DESC",
+            TypedQuery<Product> query = entityManager.createQuery(
+                    "SELECT p FROM Product p WHERE LOWER(p.category) = LOWER(:category) ORDER BY p.id DESC",
                     Product.class);
-            typedQuery.setParameter("query", "%" + query + "%");
-            return typedQuery.getResultList();
+            query.setParameter("category", category);
+            return query.getResultList();
         } catch (Exception e) {
-            logger.error("Xatolik searchProducts metodida (query: {}): {}", query, e.getMessage(), e);
+            logger.error("Xatolik findByCategory metodida (category: {}): {}", category, e.getMessage(), e);
             return Collections.emptyList();
         }
     }
 
-    public List<Product> findByRegion(String region) {
+    public List<Product> searchProducts(String query) {
         try {
-            TypedQuery<Product> query = entityManager.createQuery(
-                    "SELECT p FROM Product p WHERE p.region = :region ORDER BY p.id DESC",
+            TypedQuery<Product> queryObj = entityManager.createQuery(
+                    "SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(:query) OR LOWER(p.category) LIKE LOWER(:query) ORDER BY p.id DESC",
                     Product.class);
-            query.setParameter("region", region);
-            return query.getResultList();
+            queryObj.setParameter("query", "%" + query + "%");
+            return queryObj.getResultList();
         } catch (Exception e) {
-            logger.error("Xatolik findByRegion metodida (region: {}): {}", region, e.getMessage(), e);
+            logger.error("Xatolik searchProducts metodida (query: {}): {}", query, e.getMessage(), e);
             return Collections.emptyList();
         }
     }
