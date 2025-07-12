@@ -209,13 +209,13 @@ header {
     align-items: center;
     gap: var(--space-xxs);
     font-size: 0.9rem;
-    color: var(--dark);
+    color: #8a6dff;
     text-decoration: none;
     transition: var(--transition-fast);
 }
 
 .header-link:hover {
-    color: var(--primary);
+    color: #4d2be6;
     transform: translateY(-2px);
 }
 
@@ -698,7 +698,8 @@ header {
 .product-image-container {
     position: relative;
     overflow: hidden;
-    height: 220px;
+    height: 350px;
+    width: 100%;
     background: var(--light-dark);
     display: flex;
     align-items: center;
