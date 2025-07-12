@@ -7,37 +7,20 @@
     <title>Uzum Market - O'zbekistondagi eng yirik marketpleys</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Uzum Market - O'zbekistondagi eng katta onlayn do'kon. Eng yaxshi mahsulotlar va chegirmalar!">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preload" as="image" href="${banners[0].imageUrl}">
 </head>
 <body>
 <header>
     <div class="container">
         <div class="header-top">
-            <div class="header-location">
+            <button class="header-location" aria-label="Viloyatni tanlash">
                 <i class="fas fa-map-marker-alt"></i>
                 <span id="selectedRegion">Toshkent</span>
-            </div>
-            <div class="region-modal" id="regionModal">
-                <div class="region-modal-content">
-                    <span class="close-region-modal">×</span>
-                    <h2>Viloyatni Tanlang</h2>
-                    <div class="region-grid">
-                        <div class="region-item">Toshkent</div>
-                        <div class="region-item">Andijon</div>
-                        <div class="region-item">Buxoro</div>
-                        <div class="region-item">Farg'ona</div>
-                        <div class="region-item">Jizzax</div>
-                        <div class="region-item">Xorazm</div>
-                        <div class="region-item">Namangan</div>
-                        <div class="region-item">Navoiy</div>
-                        <div class="region-item">Qashqadaryo</div>
-                        <div class="region-item">Samarqand</div>
-                        <div class="region-item">Sirdaryo</div>
-                        <div class="region-item">Surxondaryo</div>
-                    </div>
-                </div>
-            </div>
+                <i class="fas fa-chevron-down location-arrow"></i>
+            </button>
             <div class="header-links">
                 <a href="#" class="header-link"><i class="fas fa-store"></i> Sotuvchi bo'lish</a>
                 <a href="#" class="header-link"><i class="fas fa-question-circle"></i> Savol-javob</a>
@@ -47,84 +30,85 @@
         </div>
         <div class="header-main">
             <div class="logo">uzum market</div>
-            <button class="catalog-button">
+            <button class="catalog-button" aria-label="Katalogni ochish">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 6H20M4 12H20M4 18H20" stroke="white" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round"/>
+                    <path d="M4 6H20M4 12H20M4 18H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 Katalog
             </button>
             <div class="search-bar">
-                <input type="text" placeholder="Mahsulotlar va turkumlar izlash">
-                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Mahsulotlar va turkumlar izlash" aria-label="Mahsulot izlash">
+                <i class="fas fa-search search-icon" aria-hidden="true"></i>
             </div>
             <div class="user-actions">
-                <a href="#" class="user-action-item">
+                <a href="#" class="user-action-item" aria-label="Profil">
                     <i class="fas fa-user icon"></i>
                     <span>Kirish</span>
 
                 </a>
-                <a href="#" class="user-action-item">
+                <a href="#" class="user-action-item" aria-label="Saralanganlar">
                     <i class="fas fa-heart icon"></i>
                     <span>Saralangan</span>
                 </a>
-                <a href="cart.jsp" class="user-action-item">
+                <a href="cart.jsp" class="user-action-item" aria-label="Savat">
                     <i class="fas fa-shopping-cart icon"></i>
                     <span>Savat</span>
                 </a>
             </div>
         </div>
-        <div class="header-categories">
-            <a href="${pageContext.request.contextPath}/products?category=Hafta tovarlari" class="category">Hafta tovarlari</a>
-            <a href="${pageContext.request.contextPath}/products?category=Elektronika" class="category">Elektronika</a>
-            <a href="${pageContext.request.contextPath}/products?category=Maishiy texnika" class="category">Maishiy texnika</a>
-            <a href="${pageContext.request.contextPath}/products?category=Kiyim" class="category">Kiyim</a>
-            <a href="${pageContext.request.contextPath}/products?category=Poyabzallar" class="category">Poyabzallar</a>
-            <a href="${pageContext.request.contextPath}/products?category=Aksessuarlar" class="category">Aksessuarlar</a>
-            <a href="${pageContext.request.contextPath}/products?category=Go'zallik va parvarish" class="category">Go'zallik va parvarish</a>
-            <a href="${pageContext.request.contextPath}/products?category=Salomatlik" class="category">Salomatlik</a>
-        </div>
+        <nav class="header-categories" aria-label="Mahsulot kategoriyalari">
+            <c:forEach var="category" items="${uniqueCategories}">
+                <a href="${pageContext.request.contextPath}/products?category=${category}" class="category">${category}</a>
+            </c:forEach>
+        </nav>
     </div>
 </header>
-<div class="welcome-message" id="welcomeMessage">
-    <span>Welcome User to G52 Project</span>
+
+<div class="region-modal" id="regionModal" role="dialog" aria-labelledby="regionModalTitle">
+    <div class="region-modal-content">
+        <span class="close-region-modal" aria-label="Modalni yopish">×</span>
+        <h2 id="regionModalTitle">Viloyatni Tanlang</h2>
+        <div class="region-grid">
+            <button class="region-item">Toshkent</button>
+            <button class="region-item">Andijon</button>
+            <button class="region-item">Buxoro</button>
+            <button class="region-item">Farg'ona</button>
+            <button class="region-item">Jizzax</button>
+            <button class="region-item">Xorazm</button>
+            <button class="region-item">Namangan</button>
+            <button class="region-item">Navoiy</button>
+            <button class="region-item">Qashqadaryo</button>
+            <button class="region-item">Samarqand</button>
+            <button class="region-item">Sirdaryo</button>
+            <button class="region-item">Surxondaryo</button>
+        </div>
+    </div>
 </div>
+
+<div class="welcome-message" id="welcomeMessage" role="alert">
+    <span>Xush kelibsiz, Uzum Marketga!</span>
+</div>
+
 <main class="main-content">
     <div class="container">
-        <div class="carousel-container">
+        <section class="carousel-container" aria-label="Reklama bannerlari">
             <div class="carousel-inner" id="carouselInner">
-                <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfpkiunhgiov1qici6pg/main_page_banner.jpg" alt="Promo Banner 1"
-                         loading="lazy">
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cg9a8kfhj8j9g69a2ro0/main_page_banner.jpg" alt="Promo Banner 2"
-                         loading="lazy">
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/cfublbng49devoa9a0fg/main_page_banner.jpg" alt="Promo Banner 3"
-                         loading="lazy">
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Promo Banner 4"
-                         loading="lazy">
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://images.uzum.uz/clga9ofn7c6qm23k8mkg/main_page_banner.jpg" alt="Promo Banner 5"
-                         loading="lazy">
-                </div>
+                <c:forEach var="banner" items="${banners}">
+                    <div class="carousel-slide">
+                        <img data-src="${banner.imageUrl}" src="/images/placeholder.jpg" alt="${banner.altText}" width="1440" height="400" class="lazy-image">
+                    </div>
+                </c:forEach>
             </div>
-            <button class="carousel-arrow left"><i class="fas fa-chevron-left"></i></button>
-            <button class="carousel-arrow right"><i class="fas fa-chevron-right"></i></button>
+            <button class="carousel-arrow left" aria-label="Oldingi banner"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-arrow right" aria-label="Keyingi banner"><i class="fas fa-chevron-right"></i></button>
             <div class="carousel-indicators" id="carouselIndicators">
-                <div class="carousel-indicator active"></div>
-                <div class="carousel-indicator"></div>
-                <div class="carousel-indicator"></div>
-                <div class="carousel-indicator"></div>
-                <div class="carousel-indicator"></div>
+                <c:forEach var="banner" items="${banners}">
+                    <button class="carousel-indicator" aria-label="Banner ${banner.index}"></button>
+                </c:forEach>
             </div>
-        </div>
-        <div class="feature-blocks">
+        </section>
+
+        <section class="feature-blocks" aria-label="Xizmatlar va afzalliklar">
             <div class="feature-block">
                 <div class="icon"><i class="fas fa-baby-carriage"></i></div>
                 <span>Onalar va bolalar uchun</span>
@@ -141,8 +125,9 @@
                 <div class="icon"><i class="fas fa-calendar-week"></i></div>
                 <span>Hafta tovarlari</span>
             </div>
-        </div>
-        <div class="uzum-card-banner fade-in">
+        </section>
+
+        <section class="uzum-card-banner" aria-label="Uzum karta reklama">
             <div class="uzum-card-content">
                 <div class="uzum-card-text">
                     <h1>Uzum Karta bilan <strong>30% gacha chegirma</strong></h1>
@@ -155,76 +140,90 @@
                     </ul>
                 </div>
                 <div class="uzum-card-image">
-                    <img src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg"
-                         alt="Uzum Card" loading="lazy">
+                    <img data-src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg" src="/images/placeholder.jpg" alt="Uzum Card" width="320" height="200" class="lazy-image">
                 </div>
             </div>
-        </div>
-        <div class="section-title">
-            <h2>
-                <c:choose>
-                    <c:when test="${selectedCategory != null && selectedCategory != 'all' && !empty selectedCategory}">
-                        ${selectedCategory}
-                    </c:when>
-                    <c:otherwise>
-                        Barcha mahsulotlar
-                    </c:otherwise>
-                </c:choose>
-            </h2>
-            <a href="${pageContext.request.contextPath}/products?category=all">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <c:choose>
-            <c:when test="${not empty categoryProducts}">
+        </section>
+
+        <c:if test="${not empty uniqueCategories}">
+            <c:forEach var="category" items="${uniqueCategories}">
+                <section class="section-title" aria-label="${category} kategoriyasi">
+                    <h2>${category}</h2>
+                    <a href="${pageContext.request.contextPath}/products?category=${category}">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
+                </section>
                 <div class="products-grid">
-                    <c:forEach var="product" items="${categoryProducts}" varStatus="status">
-                        <c:if test="${status.index % 4 == 0}">
-                            <div class="product-row">
-                        </c:if>
-                        <div class="product-card">
-                            <img src="${product.imageUrl}" alt="${product.name}" />
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-price">${product.price} so'm</div>
-                            <c:if test="${product.oldPrice > 0}">
-                                <div class="product-old-price">${product.oldPrice} so'm</div>
-                            </c:if>
-                            <form action="${pageContext.request.contextPath}/cart/add" method="post">
-                                <input type="hidden" name="productId" value="${product.id}">
-                                <button type="submit" class="buy-button">Savatga qo'shish</button>
-                            </form>
-                        </div>
-                        <c:if test="${status.index % 4 == 3 || status.last}">
+                    <c:set var="categoryProducts" value="${categoryProductsMap[category]}" />
+                    <c:choose>
+                        <c:when test="${not empty categoryProducts}">
+                            <c:forEach var="product" items="${categoryProducts}">
+                                <article class="product-card" data-product-id="${product.id}" tabindex="0">
+                                    <div class="product-badges">
+                                        <c:if test="${product.oldPrice > 0}">
+                                            <div class="product-badge discount">
+                                                <fmt:formatNumber value="${(product.oldPrice - product.price) / product.oldPrice * 100}" maxFractionDigits="0" />%
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${product.hasCredit}">
+                                            <div class="product-badge credit">
+                                                <i class="fas fa-credit-card"></i> Kredit
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${product.isSuperPrice}">
+                                            <div class="product-badge super-price">
+                                                <i class="fas fa-bolt"></i> Super narx
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                    <div class="product-image-container">
+                                        <img data-src="${product.imageUrl}" src="/images/placeholder.jpg" alt="${product.name}" width="240" height="220" class="product-image lazy-image">
+                                    </div>
+                                    <div class="product-content">
+                                        <div class="product-name">${product.name}</div>
+                                        <div class="product-price-row">
+                                            <div class="current-price">
+                                                <fmt:formatNumber value="${product.price}" type="number" /> so'm
+                                            </div>
+                                            <c:if test="${product.oldPrice > 0}">
+                                                <div class="old-price">
+                                                    <fmt:formatNumber value="${product.oldPrice}" type="number" /> so'm
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                        <c:if test="${product.hasCredit}">
+                                            <div class="credit-price">
+                                                <fmt:formatNumber value="${product.creditPricePerMonth}" type="number" /> so'm/oy
+                                            </div>
+                                        </c:if>
+                                        <div class="product-rating">
+                                            <div class="stars">
+                                                <c:forEach begin="1" end="5" var="i">
+                                                    <i class="fas fa-star ${i <= product.rating ? 'active' : ''}" aria-hidden="true"></i>
+                                                </c:forEach>
+                                            </div>
+                                            <span class="review-count">(${product.reviewCount})</span>
+                                        </div>
+                                        <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-to-cart-form">
+                                            <input type="hidden" name="productId" value="${product.id}">
+                                            <button type="submit" class="buy-button" aria-label="${product.name} ni savatga qo'shish">
+                                                <i class="fas fa-shopping-cart"></i> Savatga
+                                            </button>
+                                        </form>
+                                    </div>
+                                </article>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-products-message">
+                                <p>Bu kategoriyada mahsulotlar topilmadi.</p>
                             </div>
-                        </c:if>
-                    </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
-            </c:when>
-            <c:otherwise>
-                <div class="no-products-message">
-                    <p>Mahsulotlar topilmadi yoki kategoriya tanlanmagan.</p>
-                </div>
-            </c:otherwise>
-        </c:choose>
-        <div class="product-modal" id="productModal">
-            <div class="modal-content">
-                <span class="close-modal">×</span>
-                <img src="" alt="Mahsulot rasmi" class="modal-product-image" id="modalProductImage">
-                <h2 class="modal-product-title" id="modalProductTitle"></h2>
-                <div class="modal-product-price" id="modalProductPrice"></div>
-                <div class="modal-product-old-price" id="modalProductOldPrice"></div>
-                <div class="modal-product-rating" id="modalProductRating"></div>
-                <div class="modal-product-description" id="modalProductDescription"></div>
-                <div class="modal-product-specs">
-                    <h4>Texnik xususiyatlar</h4>
-                    <ul id="modalProductSpecs"></ul>
-                </div>
-                <form action="${pageContext.request.contextPath}/cart/add" method="post">
-                    <input type="hidden" name="productId" id="modalProductId">
-                    <button type="submit" class="buy-button" style="margin-top: 20px;">Savatga qo'shish</button>
-                </form>
-            </div>
-        </div>
+            </c:forEach>
+        </c:if>
     </div>
 </main>
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/js/lazy-loading.js"></script>
 </body>
 </html>

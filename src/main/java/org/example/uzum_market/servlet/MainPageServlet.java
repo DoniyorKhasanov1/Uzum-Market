@@ -11,7 +11,9 @@ import org.example.uzum_market.entity.Product;
 import org.example.uzum_market.repository.ProductRepository;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "mainPageServlet", value = "/main")
 public class MainPageServlet extends HttpServlet {
@@ -22,7 +24,6 @@ public class MainPageServlet extends HttpServlet {
         try {
             ProductRepository productRepository = new ProductRepository(em);
 
-            // Pagination parametrlari
             int page = 0;
             int size = 10;
             try {
@@ -34,34 +35,38 @@ public class MainPageServlet extends HttpServlet {
                 page = 0;
             }
 
-            // Category parametri
             String category = request.getParameter("category");
 
-            // Mahsulotlarni olish
-            em.getTransaction().begin();
+            // Barcha mahsulotlarni yuklash (paginatsiyasiz)
+            List<Product> allProducts = productRepository.findAllWithoutPagination();
             List<Product> recommendedProducts = productRepository.findRecommendedProducts();
             List<Product> discountedProducts = productRepository.findDiscountedProducts();
+            List<String> uniqueCategories = productRepository.findDistinctCategories();
+
+            // Har bir kategoriya uchun mahsulotlarni xaritaga joylash
+            Map<String, List<Product>> categoryProductsMap = new HashMap<>();
+            for (String cat : uniqueCategories) {
+                categoryProductsMap.put(cat, productRepository.findByCategory(cat));
+            }
+
+            // Tanlangan kategoriya uchun paginatsiyali mahsulotlar
             List<Product> products;
             if (category != null && !category.isEmpty() && !category.equals("all")) {
                 products = productRepository.findByCategory(category);
             } else {
                 products = productRepository.findAll(page, size);
             }
-            em.getTransaction().commit();
 
-            // Mahsulotlarni JSP ga uzatish
+            request.setAttribute("allProducts", allProducts);
             request.setAttribute("recommendedProducts", recommendedProducts);
             request.setAttribute("discountedProducts", discountedProducts);
-            request.setAttribute("categoryProducts", products); // Changed to categoryProducts for consistency
+            request.setAttribute("categoryProductsMap", categoryProductsMap);
+            request.setAttribute("uniqueCategories", uniqueCategories);
             request.setAttribute("currentPage", page);
             request.setAttribute("selectedCategory", category != null ? category : "all");
 
-            // main.jsp ga yo‘naltirish
             request.getRequestDispatcher("/main.jsp").forward(request, response);
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
             e.printStackTrace();
             request.setAttribute("errorMessage", "Mahsulotlarni yuklashda xato: " + e.getMessage());
             request.getRequestDispatcher("/error.jsp").forward(request, response);

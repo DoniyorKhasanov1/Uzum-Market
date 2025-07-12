@@ -15,7 +15,6 @@ import java.util.List;
 
 @WebServlet(name = "productServlet", value = "/products")
 public class ProductServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,14 +28,14 @@ public class ProductServlet extends HttpServlet {
             if (category == null || category.isEmpty() || category.equals("all")) {
                 categoryProducts = productRepository.findAll(0, 10); // Default to first page, 10 items
             } else {
-                categoryProducts = productRepository.searchProducts(category); // Use search for category
+                categoryProducts = productRepository.findByCategory(category);
             }
             em.getTransaction().commit();
 
             request.setAttribute("categoryProducts", categoryProducts);
             request.setAttribute("selectedCategory", category != null ? category : "all");
+            request.setAttribute("uniqueCategories", productRepository.findDistinctCategories());
 
-            // Forward to main.jsp
             request.getRequestDispatcher("/main.jsp").forward(request, response);
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
