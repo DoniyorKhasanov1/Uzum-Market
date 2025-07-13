@@ -1,45 +1,69 @@
+/* global requestAnimationFrame */
+
 // Carousel Functionality
 const carousel = {
     currentSlide: 0,
-    slides: document.querySelectorAll('.carousel-slide'),
-    totalSlides: document.querySelectorAll('.carousel-slide').length,
-    carouselInner: document.querySelector('.carousel-inner'),
-    indicators: document.querySelectorAll('.carousel-indicator'),
+    slides: null,
+    totalSlides: 0,
+    carouselInner: null,
+    indicators: null,
     autoSlideInterval: null,
+    isAnimating: false,
 
     init() {
-        if (this.totalSlides === 0) {
-            console.warn('No carousel slides found.');
+        this.carouselInner = document.querySelector('.carousel-inner');
+        this.slides = document.querySelectorAll('.carousel-slide');
+        this.indicators = document.querySelectorAll('.carousel-indicator');
+        this.totalSlides = this.slides.length;
+
+        if (this.totalSlides <= 1) {
+            console.warn('Not enough carousel slides found.');
             return;
         }
-        this.carouselInner.style.transition = 'transform 0.6s ease-in-out';
+
+        this.carouselInner.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
         this.updateCarousel();
         this.startAutoSlide();
         this.bindEvents();
     },
 
     updateCarousel() {
-        this.carouselInner.style.transform = `translateX(-${this.currentSlide * 100}%)`;
-        this.indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === this.currentSlide);
-        });
-    },
-
-    moveSlide(direction) {
-        this.currentSlide = (this.currentSlide + direction + this.totalSlides) % this.totalSlides;
-        this.updateCarousel();
-        this.resetAutoSlide();
-    },
-
-    goToSlide(index) {
-        if (index >= 0 && index < this.totalSlides) {
-            this.currentSlide = index;
-            this.updateCarousel();
-            this.resetAutoSlide();
+        if (this.carouselInner) {
+            this.carouselInner.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+            this.indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === this.currentSlide);
+            });
         }
     },
 
+    moveSlide(direction) {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+
+        this.currentSlide = (this.currentSlide + direction + this.totalSlides) % this.totalSlides;
+        this.updateCarousel();
+        this.resetAutoSlide();
+
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 600);
+    },
+
+    goToSlide(index) {
+        if (this.isAnimating || index < 0 || index >= this.totalSlides) return;
+        this.isAnimating = true;
+
+        this.currentSlide = index;
+        this.updateCarousel();
+        this.resetAutoSlide();
+
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 600);
+    },
+
     startAutoSlide() {
+        if (this.totalSlides <= 1) return;
         this.autoSlideInterval = setInterval(() => {
             this.moveSlide(1);
         }, 5000);
@@ -53,270 +77,269 @@ const carousel = {
     bindEvents() {
         const leftArrow = document.querySelector('.carousel-arrow.left');
         const rightArrow = document.querySelector('.carousel-arrow.right');
-        if (leftArrow) leftArrow.addEventListener('click', () => this.moveSlide(-1));
-        if (rightArrow) rightArrow.addEventListener('click', () => this.moveSlide(1));
+
+        if (leftArrow) {
+            leftArrow.addEventListener('click', () => this.moveSlide(-1));
+            leftArrow.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.moveSlide(-1);
+                }
+            });
+        }
+
+        if (rightArrow) {
+            rightArrow.addEventListener('click', () => this.moveSlide(1));
+            rightArrow.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.moveSlide(1);
+                }
+            });
+        }
+
         this.indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => this.goToSlide(index));
-        });
-    }
-};
-
-// Product Modal Functionality
-const productModal = {
-    modal: document.getElementById('productModal'),
-    modalContent: document.querySelector('.modal-content'),
-    loadingSpinner: document.querySelector('.loading-spinner'),
-
-    async open(productId) {
-        if (!this.modal || !this.modalContent) {
-            console.warn('Product modal elements not found.');
-            return;
-        }
-
-        // Show loading spinner
-        this.showLoadingSpinner();
-
-        try {
-            // Fetch product data from the server
-            const response = await fetch(`/api/product?id=${encodeURIComponent(productId)}`);
-            if (!response.ok) throw new Error('Failed to fetch product data');
-            const product = await response.json();
-
-            // Populate modal with real data
-            const productElements = {
-                image: this.modal.querySelector('.modal-product-image'),
-                title: this.modal.querySelector('.modal-product-title'),
-                price: this.modal.querySelector('.modal-product-price'),
-                oldPrice: this.modal.querySelector('.modal-product-old-price'),
-                rating: this.modal.querySelector('.modal-product-rating'),
-                description: this.modal.querySelector('.modal-product-description'),
-                specs: this.modal.querySelector('.modal-product-specs ul'),
-                productId: this.modal.querySelector('#modalProductId')
-            };
-
-            productElements.image.src = product.imageUrl || 'https://via.placeholder.com/300';
-            productElements.title.textContent = product.name || 'Mahsulot';
-            productElements.price.textContent = `${product.price.toLocaleString()} so'm`;
-            productElements.oldPrice.textContent = product.oldPrice ? `${product.oldPrice.toLocaleString()} so'm` : '';
-            productElements.rating.innerHTML = '<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating || 0)) +
-                '<i class="far fa-star"></i>'.repeat(5 - Math.floor(product.rating || 0)) +
-                ` (${product.reviewCount || 0})`;
-            productElements.description.textContent = product.description || 'Bu mahsulotning ta\'rifi mavjud emas.';
-            productElements.specs.innerHTML = product.specs ? product.specs.map(spec => `<li>${spec}</li>`).join('') :
-                '<li>Rang: Qora</li><li>Hajm: 128GB</li><li>Garantiya: 1 yil</li>';
-            productElements.productId.value = product.id;
-
-            // Show modal with animation
-            this.modal.style.display = 'flex';
-            this.modal.style.opacity = '0';
-            this.modalContent.style.transform = 'translateY(-30px)';
-            this.modalContent.style.opacity = '0';
-
-            requestAnimationFrame(() => {
-                this.modal.style.transition = 'opacity 0.3s ease';
-                this.modal.style.opacity = '1';
-                this.modalContent.style.transition = 'all 0.4s ease-out';
-                this.modalContent.style.transform = 'translateY(0)';
-                this.modalContent.style.opacity = '1';
+            indicator.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.goToSlide(index);
+                }
             });
-        } catch (error) {
-            console.error('Error fetching product:', error);
-            this.showError('Mahsulot ma\'lumotlarini yuklashda xato yuz berdi.');
-        } finally {
-            this.hideLoadingSpinner();
-        }
-    },
+        });
 
-    close() {
-        if (!this.modal || !this.modalContent) return;
-        this.modalContent.style.transform = 'translateY(-30px)';
-        this.modalContent.style.opacity = '0';
-        this.modal.style.transition = 'opacity 0.3s ease';
-        this.modal.style.opacity = '0';
-        setTimeout(() => {
-            this.modal.style.display = 'none';
-        }, 300);
-    },
+        // Pause on hover
+        this.carouselInner.addEventListener('mouseenter', () => {
+            clearInterval(this.autoSlideInterval);
+        });
 
-    showLoadingSpinner() {
-        if (this.loadingSpinner) this.loadingSpinner.style.display = 'block';
-    },
-
-    hideLoadingSpinner() {
-        if (this.loadingSpinner) this.loadingSpinner.style.display = 'none';
-    },
-
-    showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        this.modalContent.appendChild(errorDiv);
-        setTimeout(() => errorDiv.remove(), 3000);
+        this.carouselInner.addEventListener('mouseleave', () => {
+            this.resetAutoSlide();
+        });
     }
 };
 
 // Region Modal Functionality
 const regionModal = {
-    modal: document.querySelector('.region-modal'),
-    modalContent: document.querySelector('.region-modal-content'),
-    trigger: document.querySelector('#selectedRegion'),
-    closeButton: document.querySelector('.close-region-modal'),
-    items: document.querySelectorAll('.region-item'),
+    modal: null,
+    modalContent: null,
+    trigger: null,
+    closeButton: null,
+    items: null,
+    isOpen: false,
     regions: [
         'Toshkent', 'Andijon', 'Buxoro', 'Farg\'ona', 'Jizzax', 'Xorazm',
         'Namangan', 'Navoiy', 'Qashqadaryo', 'Samarqand', 'Sirdaryo', 'Surxondaryo'
     ],
 
     init() {
-        if (!this.modal || !this.trigger || !this.closeButton || this.items.length !== 12) {
+        this.modal = document.querySelector('.region-modal');
+        this.modalContent = document.querySelector('.region-modal-content');
+        this.trigger = document.querySelector('.header-location');
+        this.closeButton = document.querySelector('.close-region-modal');
+        this.items = document.querySelectorAll('.region-item');
+
+        if (!this.modal || !this.modalContent || !this.trigger || !this.closeButton || this.items.length !== this.regions.length) {
             console.warn('Region modal elements not found or incorrect number of regions.');
             return;
         }
+
+        this.bindEvents();
+    },
+
+    bindEvents() {
         this.trigger.addEventListener('click', (e) => {
             e.preventDefault();
             this.open();
         });
-        this.closeButton.addEventListener('click', () => this.close());
-        this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) this.close();
+
+        this.closeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.close();
         });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen) {
+                this.close();
+            }
+        });
+
+        this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal) {
+                this.close();
+            }
+        });
+
         this.items.forEach((item, index) => {
             item.addEventListener('click', () => {
                 this.selectRegion(this.regions[index]);
+            });
+
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.selectRegion(this.regions[index]);
+                }
             });
         });
     },
 
     open() {
-        this.modal.style.display = 'flex';
-        this.modal.style.opacity = '0';
-        this.modalContent.style.transform = 'scale(0.9)';
-        this.modalContent.style.opacity = '0';
-
-        requestAnimationFrame(() => {
-            this.modal.style.transition = 'opacity 0.3s ease';
-            this.modal.style.opacity = '1';
-            this.modalContent.style.transition = 'all 0.4s ease-out';
-            this.modalContent.style.transform = 'scale(1)';
-            this.modalContent.style.opacity = '1';
-        });
+        if (this.isOpen) return;
+        this.isOpen = true;
+        this.modal.classList.add('active');
+        // Focus the first region item for accessibility
+        const firstRegionItem = this.items[0];
+        if (firstRegionItem) {
+            firstRegionItem.focus();
+        }
     },
 
     close() {
-        this.modalContent.style.transform = 'scale(0.9)';
-        this.modalContent.style.opacity = '0';
-        this.modal.style.transition = 'opacity 0.3s ease';
-        this.modal.style.opacity = '0';
-        setTimeout(() => {
-            this.modal.style.display = 'none';
-        }, 300);
+        if (!this.isOpen) return;
+        this.isOpen = false;
+        this.modal.classList.remove('active');
+        // Return focus to the trigger button
+        if (this.trigger) {
+            this.trigger.focus();
+        }
     },
 
-    selectRegion(regionName) {
-        const selectedRegion = document.querySelector('#selectedRegion');
-        if (!selectedRegion) return;
-        selectedRegion.style.transform = 'scale(0.9)';
-        selectedRegion.style.opacity = '0.5';
-        setTimeout(() => {
-            selectedRegion.textContent = regionName;
-            selectedRegion.style.transition = 'all 0.4s ease-out';
-            selectedRegion.style.transform = 'scale(1.1)';
-            selectedRegion.style.opacity = '1';
-            setTimeout(() => {
-                selectedRegion.style.transform = 'scale(1)';
-            }, 300);
-            // Update welcome message
-            const welcomeMessage = document.querySelector('.welcome-message');
-            if (welcomeMessage) {
-                welcomeMessage.textContent = `Xush kelibsiz, ${regionName}!`;
-            }
-        }, 150);
+    selectRegion(region) {
+        const selectedRegionElement = document.getElementById('selectedRegion');
+        if (selectedRegionElement) {
+            selectedRegionElement.textContent = region;
+        }
         this.close();
     }
 };
 
 // Search Functionality
 const searchBar = {
-    input: document.querySelector('.search-bar input'),
+    input: null,
+    searchIcon: null,
+
     init() {
-        if (!this.input) return;
+        this.input = document.querySelector('.search-bar input');
+        this.searchIcon = document.querySelector('.search-bar .search-icon');
+
+        if (!this.input || !this.searchIcon) {
+            console.warn('Search bar elements not found.');
+            return;
+        }
+
+        this.searchIcon.addEventListener('click', () => {
+            this.performSearch();
+        });
+
         this.input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                const query = this.input.value.trim();
-                if (query) {
-                    fetch(`/api/products?search=${encodeURIComponent(query)}`)
-                        .then(response => response.json())
-                        .then(products => updateProductGrid(products))
-                        .catch(error => {
-                            console.error('Error searching products:', error);
-                            productModal.showError('Qidiruvda xato yuz berdi.');
-                        });
-                }
+                this.performSearch();
             }
         });
-    }
-};
 
-// Update Product Grid
-function updateProductGrid(products) {
-    const productsGrid = document.querySelector('.products-grid');
-    if (!productsGrid) return;
-
-    productsGrid.innerHTML = products.map(product => `
-        <div class="product-card" data-product-id="${product.id}">
-            <div class="product-image-container">
-                <img class="product-image" src="${product.imageUrl || 'https://via.placeholder.com/300'}" alt="${product.name}">
-                ${product.oldPrice ? `<span class="discount-badge">${Math.round((product.oldPrice - product.price) / product.oldPrice * 100)}% chegirma</span>` : ''}
-                ${product.hasCredit ? '<span class="kredit-badge">Kreditda</span>' : ''}
-                ${product.isSuperPrice ? '<span class="super-price-badge">Super narx</span>' : ''}
-            </div>
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <div class="product-rating">
-                    ${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating || 0))}
-                    ${'<i class="far fa-star"></i>'.repeat(5 - Math.floor(product.rating || 0))}
-                    <span>(${product.reviewCount || 0})</span>
-                </div>
-                <div class="product-price">${product.price.toLocaleString()} so'm</div>
-                ${product.oldPrice ? `<div class="product-old-price">${product.oldPrice.toLocaleString()} so'm</div>` : ''}
-                ${product.hasCredit ? `<div class="product-credit">${product.creditPricePerMonth.toLocaleString()} so'm/oy</div>` : ''}
-                <form action="/cart/add" method="post">
-                    <input type="hidden" name="productId" value="${product.id}">
-                    <button type="submit" class="buy-button">Sotib olish</button>
-                </form>
-            </div>
-        </div>
-    `).join('');
-
-    initializeProductCards();
-}
-
-// Global Click Handler for Modals
-window.addEventListener('click', (event) => {
-    if (event.target === productModal.modal) {
-        productModal.close();
-    }
-    if (event.target === regionModal.modal) {
-        regionModal.close();
-    }
-});
-
-// Product Card Click Handler
-const initializeProductCards = () => {
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('buy-button') || e.target.closest('form')) return;
-            const productId = card.dataset.productId || 'default';
-            productModal.open(productId);
+        this.input.addEventListener('input', () => {
+            // Implement search suggestions if needed
         });
-    });
+    },
+
+    performSearch() {
+        const query = this.input.value.trim();
+        if (query) {
+            window.location.href = `${window.location.pathname}?search=${encodeURIComponent(query)}`;
+        } else {
+            this.showError('Iltimos, qidiruv so\'zini kiriting.');
+        }
+    },
+
+    showError(message) {
+        const existingError = this.input.parentNode.querySelector('.error-message');
+        if (existingError) existingError.remove();
+
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        this.input.parentNode.appendChild(errorDiv);
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 3000);
+    }
 };
 
-// Initialize Everything
+// Dark Mode Toggle
+const themeToggle = {
+    init() {
+        const toggleButton = document.createElement('a');
+        toggleButton.classList.add('header-link', 'theme-toggle');
+        toggleButton.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+        toggleButton.setAttribute('aria-label', 'Toggle dark mode');
+        toggleButton.setAttribute('role', 'button');
+        toggleButton.setAttribute('tabindex', '0');
+
+        const headerLinks = document.querySelector('.header-links');
+        if (headerLinks) {
+            headerLinks.appendChild(toggleButton);
+        }
+
+        this.updateButtonText(toggleButton);
+
+        toggleButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.toggleTheme();
+            this.updateButtonText(toggleButton);
+        });
+
+        toggleButton.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.toggleTheme();
+                this.updateButtonText(toggleButton);
+            }
+        });
+    },
+
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        try {
+            localStorage.setItem('themePreference', newTheme);
+        } catch (e) {
+            console.warn('Could not save theme preference to localStorage');
+        }
+    },
+
+    updateButtonText(button) {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            button.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+        } else {
+            button.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+        }
+    }
+};
+
+// Initialization
 document.addEventListener('DOMContentLoaded', () => {
     carousel.init();
     regionModal.init();
     searchBar.init();
-    initializeProductCards();
+    themeToggle.init();
+
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    if (welcomeMessage) {
+        welcomeMessage.style.display = 'block';
+        setTimeout(() => {
+            welcomeMessage.style.display = 'none';
+        }, 3500);
+    }
+
+    try {
+        const savedTheme = localStorage.getItem('themePreference');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    } catch (e) {
+        console.warn('Could not read theme preference from localStorage');
+    }
 });

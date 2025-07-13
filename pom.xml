@@ -25,16 +25,25 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--   Gson dependency for parsing JSON objects to Java object and vice versa  -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.13.0</version>
         </dependency>
+        <!-- Mailing dependency for MailService class -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <!-- Hibernate validator dependency to validate object for some constraints -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.2.Final</version>
         </dependency>
+        <!-- PostgresSQL Driver dependency -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

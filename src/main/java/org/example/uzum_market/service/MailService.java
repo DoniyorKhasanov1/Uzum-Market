@@ -33,7 +33,7 @@ public class MailService {
                     Message.RecipientType.TO,
                     InternetAddress.parse(recipientEmail)
             );
-            message.setSubject("Your Verification Code");
+            message.setSubject("<h1 style=\"color: black; font-weight: revert-layer\">Your verification code: </h1>");
             message.setText("Your verification code is: " + code);
 
             Transport.send(message);
