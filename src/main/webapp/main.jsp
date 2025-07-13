@@ -9,8 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Uzum Market - O'zbekistondagi eng katta onlayn do'kon. Eng yaxshi mahsulotlar va chegirmalar!">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preload" as="image" href="${banners[0].imageUrl}">
+    <link rel="preload" as="image" href="https://via.placeholder.com/1440x400?text=Banner+1">
+    <link rel="icon" type="image/png" href="https://play-lh.googleusercontent.com/H8bZL1-8zwqPaRJjNZQEo43Uq56pZWy5KbkhP2BJOYJlKA23hVyzag4Ll2e99-pMAw6e=w240-h480-rw">
 </head>
 <body>
 <header>
@@ -44,10 +46,6 @@
                 <a href="#" class="user-action-item" aria-label="Profil">
                     <i class="fas fa-user icon"></i>
                     <span>Kirish</span>
-                </a>
-                <a href="#" class="user-action-item" aria-label="Saralanganlar">
-                    <i class="fas fa-heart icon"></i>
-                    <span>Saralangan</span>
                 </a>
                 <a href="cart.jsp" class="user-action-item" aria-label="Savat">
                     <i class="fas fa-shopping-cart icon"></i>
@@ -92,18 +90,30 @@
     <div class="container">
         <section class="carousel-container" aria-label="Reklama bannerlari">
             <div class="carousel-inner" id="carouselInner">
-                <c:forEach var="banner" items="${banners}">
-                    <div class="carousel-slide">
-                        <img data-src="${banner.imageUrl}" src="/images/placeholder.jpg" alt="${banner.altText}" width="1440" height="400" class="lazy-image">
-                    </div>
-                </c:forEach>
+                <div class="carousel-slide">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpgbc.png" alt="Banner 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpg(3).png" alt="Banner 2">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpg(4).png" alt="Banner 3">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpg(2).png" alt="Banner 4">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://uzum-market-ea2c4.web.app/img/main_page_banner.jpg(1).png" alt="Banner 5">
+                </div>
             </div>
             <button class="carousel-arrow left" aria-label="Oldingi banner"><i class="fas fa-chevron-left"></i></button>
             <button class="carousel-arrow right" aria-label="Keyingi banner"><i class="fas fa-chevron-right"></i></button>
             <div class="carousel-indicators" id="carouselIndicators">
-                <c:forEach var="banner" items="${banners}">
-                    <button class="carousel-indicator" aria-label="Banner ${banner.index}"></button>
-                </c:forEach>
+                <button class="carousel-indicator" aria-label="Banner 1"></button>
+                <button class="carousel-indicator" aria-label="Banner 2"></button>
+                <button class="carousel-indicator" aria-label="Banner 3"></button>
+                <button class="carousel-indicator" aria-label="Banner 4"></button>
+                <button class="carousel-indicator" aria-label="Banner 5"></button>
             </div>
         </section>
 
@@ -139,7 +149,7 @@
                     </ul>
                 </div>
                 <div class="uzum-card-image">
-                    <img data-src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg" src="/images/placeholder.jpg" alt="Uzum Card" width="320" height="200" class="lazy-image">
+                    <img src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg" alt="Uzum Card" width="320" height="200">
                 </div>
             </div>
         </section>
@@ -174,7 +184,7 @@
                                         </c:if>
                                     </div>
                                     <div class="product-image-container">
-                                        <img data-src="${product.imageUrl}" src="/images/placeholder.jpg" alt="${product.name}" width="240" height="220" class="product-image lazy-image">
+                                        <img src="${product.imageUrl}" alt="${product.name}" width="240" height="220" class="product-image">
                                     </div>
                                     <div class="product-content">
                                         <div class="product-name">${product.name}</div>
@@ -222,6 +232,105 @@
         </c:if>
     </div>
 </main>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>Biz haqimizda</h3>
+            <div class="footer-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Yetkazib berish punktlari</span>
+            </div>
+            <div class="footer-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Vakansiyalar</span>
+            </div>
+            <div class="footer-item">
+                <i class="fas fa-info-circle"></i>
+                <span>Kompaniya haqida</span>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h3>Foydalanuvchilar uchun</h3>
+            <div class="footer-item">
+                <i class="fas fa-headset"></i>
+                <span>Biz bilan bog'lanish</span>
+            </div>
+            <div class="footer-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Savol-Javob</span>
+            </div>
+            <div class="footer-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Qaytarish shartlari</span>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h3>Tadbirkorlar uchun</h3>
+            <div class="footer-item">
+                <i class="fas fa-store"></i>
+                <span>Sotuvchi bo'lish</span>
+            </div>
+            <div class="footer-item">
+                <i class="fas fa-truck"></i>
+                <span>Yetkazib berish punkti ochish</span>
+            </div>
+            <div class="footer-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Biznes uchun imkoniyatlar</span>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h3>Ilovani yuklab olish</h3>
+            <div class="footer-apps">
+                <div class="app-download">
+                    <i class="fab fa-apple"></i>
+                    <div>
+                        <span>App Store orqali</span>
+                        <span class="app-subtext">iOS uchun mavjud</span>
+                    </div>
+                </div>
+                <div class="app-download">
+                    <i class="fab fa-google-play"></i>
+                    <div>
+                        <span>Google Play orqali</span>
+                        <span class="app-subtext">Android uchun mavjud</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="social-title">Ijtimoiy tarmoqlar</h3>
+            <div class="footer-social">
+                <div class="social-icon">
+                    <i class="fab fa-telegram"></i>
+                </div>
+                <div class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div class="social-icon">
+                    <i class="fab fa-facebook"></i>
+                </div>
+                <div class="social-icon">
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="copyright">© 2023 Uzum Market. Barcha huquqlar himoyalangan</div>
+        <div class="payment-methods">
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fab fa-cc-paypal"></i>
+            <i class="fas fa-credit-card"></i>
+        </div>
+    </div>
+</footer>
+
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 <script src="${pageContext.request.contextPath}/js/lazy-loading.js"></script>
 </body>
