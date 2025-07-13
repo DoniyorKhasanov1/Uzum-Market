@@ -108,7 +108,6 @@ const carousel = {
             });
         });
 
-        // Pause on hover
         this.carouselInner.addEventListener('mouseenter', () => {
             clearInterval(this.autoSlideInterval);
         });
@@ -116,6 +115,80 @@ const carousel = {
         this.carouselInner.addEventListener('mouseleave', () => {
             this.resetAutoSlide();
         });
+    }
+};
+
+// Login Modal Functionality
+const loginModal = {
+    modal: null,
+    trigger: null,
+    closeButton: null,
+
+    init() {
+        this.modal = document.getElementById('loginModal');
+        this.trigger = document.querySelector('.user-action-item[aria-label="Profil"]');
+        this.closeButton = document.querySelector('.close-login-modal');
+
+        if (!this.modal || !this.trigger) return;
+
+        this.bindEvents();
+        this.initCodeInputs();
+    },
+
+    bindEvents() {
+        this.trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.openModal();
+        });
+
+        if (this.closeButton) {
+            this.closeButton.addEventListener('click', () => {
+                this.closeModal();
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target === this.modal) {
+                this.closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+                this.closeModal();
+            }
+        });
+    },
+
+    initCodeInputs() {
+        const inputs = document.querySelectorAll('.code-inputs input');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1) {
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    },
+
+    openModal() {
+        this.modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        const firstInput = this.modal.querySelector('.code-inputs input');
+        if (firstInput) firstInput.focus();
+    },
+
+    closeModal() {
+        this.modal.classList.remove('active');
+        document.body.style.overflow = '';
     }
 };
 
@@ -133,16 +206,12 @@ const regionModal = {
     ],
 
     init() {
-        this.modal = document.querySelector('.region-modal');
-        this.modalContent = document.querySelector('.region-modal-content');
+        this.modal = document.getElementById('regionModal');
         this.trigger = document.querySelector('.header-location');
         this.closeButton = document.querySelector('.close-region-modal');
         this.items = document.querySelectorAll('.region-item');
 
-        if (!this.modal || !this.modalContent || !this.trigger || !this.closeButton || this.items.length !== this.regions.length) {
-            console.warn('Region modal elements not found or incorrect number of regions.');
-            return;
-        }
+        if (!this.modal || !this.trigger) return;
 
         this.bindEvents();
     },
@@ -150,196 +219,50 @@ const regionModal = {
     bindEvents() {
         this.trigger.addEventListener('click', (e) => {
             e.preventDefault();
-            this.open();
+            this.openModal();
         });
 
-        this.closeButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.close();
+        if (this.closeButton) {
+            this.closeButton.addEventListener('click', () => {
+                this.closeModal();
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target === this.modal) {
+                this.closeModal();
+            }
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isOpen) {
-                this.close();
+            if (e.key === 'Escape' && this.modal.classList.contains('active')) {
+                this.closeModal();
             }
         });
 
-        this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) {
-                this.close();
-            }
-        });
-
-        this.items.forEach((item, index) => {
+        this.items.forEach((item) => {
             item.addEventListener('click', () => {
-                this.selectRegion(this.regions[index]);
-            });
-
-            item.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    this.selectRegion(this.regions[index]);
-                }
+                const region = item.textContent;
+                document.getElementById('selectedRegion').textContent = region;
+                this.closeModal();
             });
         });
     },
 
-    open() {
-        if (this.isOpen) return;
-        this.isOpen = true;
+    openModal() {
         this.modal.classList.add('active');
-        // Focus the first region item for accessibility
-        const firstRegionItem = this.items[0];
-        if (firstRegionItem) {
-            firstRegionItem.focus();
-        }
+        document.body.style.overflow = 'hidden';
     },
 
-    close() {
-        if (!this.isOpen) return;
-        this.isOpen = false;
+    closeModal() {
         this.modal.classList.remove('active');
-        // Return focus to the trigger button
-        if (this.trigger) {
-            this.trigger.focus();
-        }
-    },
-
-    selectRegion(region) {
-        const selectedRegionElement = document.getElementById('selectedRegion');
-        if (selectedRegionElement) {
-            selectedRegionElement.textContent = region;
-        }
-        this.close();
+        document.body.style.overflow = '';
     }
 };
 
-// Search Functionality
-const searchBar = {
-    input: null,
-    searchIcon: null,
-
-    init() {
-        this.input = document.querySelector('.search-bar input');
-        this.searchIcon = document.querySelector('.search-bar .search-icon');
-
-        if (!this.input || !this.searchIcon) {
-            console.warn('Search bar elements not found.');
-            return;
-        }
-
-        this.searchIcon.addEventListener('click', () => {
-            this.performSearch();
-        });
-
-        this.input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.performSearch();
-            }
-        });
-
-        this.input.addEventListener('input', () => {
-            // Implement search suggestions if needed
-        });
-    },
-
-    performSearch() {
-        const query = this.input.value.trim();
-        if (query) {
-            window.location.href = `${window.location.pathname}?search=${encodeURIComponent(query)}`;
-        } else {
-            this.showError('Iltimos, qidiruv so\'zini kiriting.');
-        }
-    },
-
-    showError(message) {
-        const existingError = this.input.parentNode.querySelector('.error-message');
-        if (existingError) existingError.remove();
-
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        this.input.parentNode.appendChild(errorDiv);
-        setTimeout(() => {
-            errorDiv.remove();
-        }, 3000);
-    }
-};
-
-// Dark Mode Toggle
-const themeToggle = {
-    init() {
-        const toggleButton = document.createElement('a');
-        toggleButton.classList.add('header-link', 'theme-toggle');
-        toggleButton.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
-        toggleButton.setAttribute('aria-label', 'Toggle dark mode');
-        toggleButton.setAttribute('role', 'button');
-        toggleButton.setAttribute('tabindex', '0');
-
-        const headerLinks = document.querySelector('.header-links');
-        if (headerLinks) {
-            headerLinks.appendChild(toggleButton);
-        }
-
-        this.updateButtonText(toggleButton);
-
-        toggleButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.toggleTheme();
-            this.updateButtonText(toggleButton);
-        });
-
-        toggleButton.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.toggleTheme();
-                this.updateButtonText(toggleButton);
-            }
-        });
-    },
-
-    toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        try {
-            localStorage.setItem('themePreference', newTheme);
-        } catch (e) {
-            console.warn('Could not save theme preference to localStorage');
-        }
-    },
-
-    updateButtonText(button) {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            button.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
-        } else {
-            button.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
-        }
-    }
-};
-
-// Initialization
+// Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     carousel.init();
+    loginModal.init();
     regionModal.init();
-    searchBar.init();
-    themeToggle.init();
-
-    const welcomeMessage = document.getElementById('welcomeMessage');
-    if (welcomeMessage) {
-        welcomeMessage.style.display = 'block';
-        setTimeout(() => {
-            welcomeMessage.style.display = 'none';
-        }, 3500);
-    }
-
-    try {
-        const savedTheme = localStorage.getItem('themePreference');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-    } catch (e) {
-        console.warn('Could not read theme preference from localStorage');
-    }
 });

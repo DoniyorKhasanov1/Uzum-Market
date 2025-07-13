@@ -44,8 +44,43 @@
                 <a href="#" class="user-action-item" aria-label="Profil">
                     <i class="fas fa-user icon"></i>
                     <span>Kirish</span>
-
                 </a>
+                <div class="login-modal" id="loginModal" role="dialog" aria-labelledby="loginModalTitle">
+                    <div class="login-modal-content">
+                        <button class="close-login-modal" aria-label="Modalni yopish">×</button>
+                        <div class="login-header">
+                            <h2 id="loginModalTitle">Uzum Market'ga kirish</h2>
+                        </div>
+                        <div class="login-steps">
+                            <div class="login-step email-step" id="emailStep">
+                                <div class="method-description">
+                                    <p>Iltimos, elektron pochta manzilingizni kiriting</p>
+                                </div>
+                                <form action="#" method="post" class="email-form" id="emailForm">
+                                    <input type="email" name="email" id="emailInput" placeholder="masalan: example@uzum.uz" aria-label="Elektron pochta" required>
+                                    <button type="submit" class="get-code-button">Kod olish</button>
+                                </form>
+                            </div>
+                            <div class="login-step code-step" id="codeStep" style="display: none;">
+                                <div class="method-description">
+                                    <p>Davom etish uchun emailga yuborilgan kodni kiriting</p>
+                                </div>
+                                <form action="#" method="post" class="code-form" id="codeForm">
+                                    <div class="code-inputs">
+                                        <input type="text" name="code1" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 1" required>
+                                        <input type="text" name="code2" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 2" required>
+                                        <input type="text" name="code3" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 3" required>
+                                        <input type="text" name="code4" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 4" required>
+                                        <input type="text" name="code5" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 5" required>
+                                        <input type="text" name="code6" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 6" required>
+                                    </div>
+                                    <input type="hidden" name="email" id="hiddenEmail">
+                                    <button type="submit" class="verify-code-button">Tasdiqlash</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <a href="#" class="user-action-item" aria-label="Saralanganlar">
                     <i class="fas fa-heart icon"></i>
                     <span>Saralangan</span>
@@ -64,165 +99,42 @@
     </div>
 </header>
 
-<div class="region-modal" id="regionModal" role="dialog" aria-labelledby="regionModalTitle">
-    <div class="region-modal-content">
-        <span class="close-region-modal" aria-label="Modalni yopish">×</span>
-        <h2 id="regionModalTitle">Viloyatni Tanlang</h2>
-        <div class="region-grid">
-            <button class="region-item">Toshkent</button>
-            <button class="region-item">Andijon</button>
-            <button class="region-item">Buxoro</button>
-            <button class="region-item">Farg'ona</button>
-            <button class="region-item">Jizzax</button>
-            <button class="region-item">Xorazm</button>
-            <button class="region-item">Namangan</button>
-            <button class="region-item">Navoiy</button>
-            <button class="region-item">Qashqadaryo</button>
-            <button class="region-item">Samarqand</button>
-            <button class="region-item">Sirdaryo</button>
-            <button class="region-item">Surxondaryo</button>
-        </div>
+<%
+    String step = request.getParameter("step");
+    if ("code".equals(step)) {
+%>
+<script>
+    document.getElementById('emailStep').classList.remove('active');
+    document.getElementById('codeStep').classList.add('active');
+    document.getElementById('hiddenEmail').value = '<%= request.getParameter("email") %>';
+</script>
+<%
+} else if ("error".equals(request.getParameter("error"))) {
+%>
+<script>alert('Xatolik yuz berdi!');</script>
+<%
+} else if ("success".equals(request.getParameter("success"))) {
+%>
+<script>alert('Muvaffaqiyatli kirdingiz!');</script>
+<%
+    }
+%>
+
+<div class="carousel-container">
+    <div class="carousel-inner">
+        <c:forEach var="banner" items="${banners}">
+            <a href="${banner.linkUrl}" class="carousel-slide-link">
+                <div class="carousel-slide">
+                    <img src="${banner.imageUrl}" alt="Banner" data-src="${banner.imageUrl}" class="loaded">
+                </div>
+            </a>
+        </c:forEach>
     </div>
+    <!-- Arrows va indicators qo'shish uchun joy -->
 </div>
-
-<div class="welcome-message" id="welcomeMessage" role="alert">
-    <span>Xush kelibsiz, Uzum Marketga!</span>
+<div class="main-content">
+    <!-- Boshqa kontent -->
 </div>
-
-<main class="main-content">
-    <div class="container">
-        <section class="carousel-container" aria-label="Reklama bannerlari">
-            <div class="carousel-inner" id="carouselInner">
-                <c:forEach var="banner" items="${banners}">
-                    <div class="carousel-slide">
-                        <img data-src="${banner.imageUrl}" src="/images/placeholder.jpg" alt="${banner.altText}" width="1440" height="400" class="lazy-image">
-                    </div>
-                </c:forEach>
-            </div>
-            <button class="carousel-arrow left" aria-label="Oldingi banner"><i class="fas fa-chevron-left"></i></button>
-            <button class="carousel-arrow right" aria-label="Keyingi banner"><i class="fas fa-chevron-right"></i></button>
-            <div class="carousel-indicators" id="carouselIndicators">
-                <c:forEach var="banner" items="${banners}">
-                    <button class="carousel-indicator" aria-label="Banner ${banner.index}"></button>
-                </c:forEach>
-            </div>
-        </section>
-
-        <section class="feature-blocks" aria-label="Xizmatlar va afzalliklar">
-            <div class="feature-block">
-                <div class="icon"><i class="fas fa-baby-carriage"></i></div>
-                <span>Onalar va bolalar uchun</span>
-            </div>
-            <div class="feature-block">
-                <div class="icon"><i class="fas fa-tag"></i></div>
-                <span>Arzon narxlar kafolati</span>
-            </div>
-            <div class="feature-block">
-                <div class="icon"><i class="fas fa-laptop"></i></div>
-                <span>Zamonaviy Bozor</span>
-            </div>
-            <div class="feature-block">
-                <div class="icon"><i class="fas fa-calendar-week"></i></div>
-                <span>Hafta tovarlari</span>
-            </div>
-        </section>
-
-        <section class="uzum-card-banner" aria-label="Uzum karta reklama">
-            <div class="uzum-card-content">
-                <div class="uzum-card-text">
-                    <h1>Uzum Karta bilan <strong>30% gacha chegirma</strong></h1>
-                    <h2>Bepul rasmiylashtiring</h2>
-                    <ul class="uzum-card-features">
-                        <li><i class="fas fa-check-circle"></i> Oson to'lovlar</li>
-                        <li><i class="fas fa-check-circle"></i> Tezkor yetkazish</li>
-                        <li><i class="fas fa-check-circle"></i> Maxsus takliflar</li>
-                        <li><i class="fas fa-check-circle"></i> Qulay xarid qilish</li>
-                    </ul>
-                </div>
-                <div class="uzum-card-image">
-                    <img data-src="https://static44.tgcnt.ru/posts/_0/93/9398f0695193db3323205569bfe34dad.jpg" src="/images/placeholder.jpg" alt="Uzum Card" width="320" height="200" class="lazy-image">
-                </div>
-            </div>
-        </section>
-
-        <c:if test="${not empty uniqueCategories}">
-            <c:forEach var="category" items="${uniqueCategories}">
-                <section class="section-title" aria-label="${category} kategoriyasi">
-                    <h2>${category}</h2>
-                    <a href="${pageContext.request.contextPath}/products?category=${category}">Barchasini ko'rsatish <i class="fas fa-arrow-right"></i></a>
-                </section>
-                <div class="products-grid">
-                    <c:set var="categoryProducts" value="${categoryProductsMap[category]}" />
-                    <c:choose>
-                        <c:when test="${not empty categoryProducts}">
-                            <c:forEach var="product" items="${categoryProducts}">
-                                <article class="product-card" data-product-id="${product.id}" tabindex="0">
-                                    <div class="product-badges">
-                                        <c:if test="${product.oldPrice > 0}">
-                                            <div class="product-badge discount">
-                                                <fmt:formatNumber value="${(product.oldPrice - product.price) / product.oldPrice * 100}" maxFractionDigits="0" />%
-                                            </div>
-                                        </c:if>
-                                        <c:if test="${product.hasCredit}">
-                                            <div class="product-badge credit">
-                                                <i class="fas fa-credit-card"></i> Kredit
-                                            </div>
-                                        </c:if>
-                                        <c:if test="${product.isSuperPrice}">
-                                            <div class="product-badge super-price">
-                                                <i class="fas fa-bolt"></i> Super narx
-                                            </div>
-                                        </c:if>
-                                    </div>
-                                    <div class="product-image-container">
-                                        <img data-src="${product.imageUrl}" src="/images/placeholder.jpg" alt="${product.name}" width="240" height="220" class="product-image lazy-image">
-                                    </div>
-                                    <div class="product-content">
-                                        <div class="product-name">${product.name}</div>
-                                        <div class="product-price-row">
-                                            <div class="current-price">
-                                                <fmt:formatNumber value="${product.price}" type="number" /> so'm
-                                            </div>
-                                            <c:if test="${product.oldPrice > 0}">
-                                                <div class="old-price">
-                                                    <fmt:formatNumber value="${product.oldPrice}" type="number" /> so'm
-                                                </div>
-                                            </c:if>
-                                        </div>
-                                        <c:if test="${product.hasCredit}">
-                                            <div class="credit-price">
-                                                <fmt:formatNumber value="${product.creditPricePerMonth}" type="number" /> so'm/oy
-                                            </div>
-                                        </c:if>
-                                        <div class="product-rating">
-                                            <div class="stars">
-                                                <c:forEach begin="1" end="5" var="i">
-                                                    <i class="fas fa-star ${i <= product.rating ? 'active' : ''}" aria-hidden="true"></i>
-                                                </c:forEach>
-                                            </div>
-                                            <span class="review-count">(${product.reviewCount})</span>
-                                        </div>
-                                        <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-to-cart-form">
-                                            <input type="hidden" name="productId" value="${product.id}">
-                                            <button type="submit" class="buy-button" aria-label="${product.name} ni savatga qo'shish">
-                                                <i class="fas fa-shopping-cart"></i> Savatga
-                                            </button>
-                                        </form>
-                                    </div>
-                                </article>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="no-products-message">
-                                <p>Bu kategoriyada mahsulotlar topilmadi.</p>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </c:forEach>
-        </c:if>
-    </div>
-</main>
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 <script src="${pageContext.request.contextPath}/js/lazy-loading.js"></script>
 </body>
