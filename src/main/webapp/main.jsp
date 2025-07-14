@@ -65,7 +65,7 @@
                                 <div class="method-description">
                                     <p>Davom etish uchun emailga yuborilgan kodni kiriting</p>
                                 </div>
-                                <form action="#" method="post" class="code-form" id="codeForm">
+                                <form action="VerifyCodeServlet" method="post" class="code-form" id="codeForm">
                                     <div class="code-inputs">
                                         <input type="text" name="code1" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 1" required>
                                         <input type="text" name="code2" maxlength="1" pattern="[0-9]" aria-label="Kod raqami 2" required>

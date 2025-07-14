@@ -182,13 +182,21 @@ const loginModal = {
     openModal() {
         this.modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        const emailStep = this.modal.querySelector('#emailStep');
+        if (emailStep) emailStep.classList.add('active-step');
+
         const firstInput = this.modal.querySelector('.code-inputs input');
         if (firstInput) firstInput.focus();
-    },
+    }
+    ,
 
     closeModal() {
         this.modal.classList.remove('active');
         document.body.style.overflow = '';
+
+        const activeStep = this.modal.querySelector('.login-step.active-step');
+        if (activeStep) activeStep.classList.remove('active-step');
     }
 };
 
@@ -261,8 +269,8 @@ const regionModal = {
 };
 
 // Initialize on DOM load
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
     carousel.init();
-    loginModal.init();
+    loginModal.init(); 
     regionModal.init();
 });

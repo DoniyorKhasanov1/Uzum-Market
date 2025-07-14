@@ -330,9 +330,9 @@ header {
     z-index: 10000;
     align-items: center;
     justify-content: center;
-    padding: var(--space-md);
+    padding: 24px;
     overflow-y: auto;
-    transition: opacity var(--transition-normal);
+    transition: opacity 0.3s;
 }
 
 .login-modal.active {
@@ -341,19 +341,18 @@ header {
 }
 
 .login-modal-content {
-    background: var(--light);
-    border-radius: var(--radius-xl);
+    background: white;
+    border-radius: 12px;
     width: 100%;
     max-width: 420px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: var(--shadow-xl);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     transform: scale(0.9);
     opacity: 0;
-    transition: transform var(--transition-normal), opacity var(--transition-normal);
+    transition: transform 0.3s, opacity 0.3s;
     position: relative;
     z-index: 10001;
-    border: 1px solid var(--light-dark);
 }
 
 .login-modal.active .login-modal-content {
@@ -363,15 +362,13 @@ header {
 
 .close-login-modal {
     position: absolute;
-    top: var(--space-md);
-    right: var(--space-md);
+    top: 16px;
+    right: 16px;
     font-size: 1.8rem;
     cursor: pointer;
-    transition: var(--transition-fast);
     background: none;
     border: none;
-    color: var(--dark);
-    padding: 0;
+    color: black;
     z-index: 10002;
 }
 
@@ -381,7 +378,7 @@ header {
 }
 
 .login-header {
-    padding: var(--space-lg);
+    padding: 24px;
     text-align: center;
 }
 
@@ -393,21 +390,21 @@ header {
 }
 
 .login-steps {
-    padding: var(--space-lg);
+    padding: 24px;
 }
 
 .login-step {
     display: none;
 }
 
-.login-step.active {
+.login-step.active-step {
     display: block;
 }
 
 .email-form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: 16px;
 }
 
 #emailInput {
@@ -452,8 +449,8 @@ header {
 
 .code-inputs {
     display: flex;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
+    gap: 8px;
+    margin-bottom: 16px;
     justify-content: center;
 }
 
