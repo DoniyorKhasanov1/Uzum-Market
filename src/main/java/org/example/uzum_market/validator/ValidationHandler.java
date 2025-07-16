@@ -3,6 +3,8 @@ package org.example.uzum_market.validator;
 import jakarta.validation.ConstraintValidator;
 import org.example.uzum_market.annotations.EmailValidation;
 
+import java.math.BigInteger;
+
 /**
  * Email validation handler for {@link EmailValidation} annotation.
  * {@link ValidationHandler#isValid(String, jakarta.validation.ConstraintValidatorContext)}
@@ -25,6 +27,8 @@ public class ValidationHandler implements ConstraintValidator<EmailValidation, S
         }
         return value.matches(regexp);
     }
+
+    //!It's not an override method
 
     @Override
     public void initialize(EmailValidation constraintAnnotation) {

@@ -43,9 +43,9 @@
                 <i class="fas fa-search search-icon" aria-hidden="true"></i>
             </div>
             <div class="user-actions">
-                <a href="#" class="user-action-item" aria-label="Profil">
+                <a href="login" class="user-action-item" aria-label="Profil">
                     <i class="fas fa-user icon"></i>
-                    <span>Kirish</span>
+                    <span >Kirish</span>
 
                 </a>
                 <a href="cart.jsp" class="user-action-item" aria-label="Savat">

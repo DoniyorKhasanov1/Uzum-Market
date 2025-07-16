@@ -27,5 +27,7 @@ public class UserEntity {
     @EmailValidation
     @Column(name = "user_email", unique = true, nullable = false)
     private String email;
+    @Column(nullable = false, name = "passwords")
+    private String password;
 
 }
